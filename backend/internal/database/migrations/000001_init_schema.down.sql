@@ -1,3 +1,6 @@
+UPDATE schema_migrations
+SET dirty = false;
+
 DROP TABLE IF EXISTS account_location_tb CASCADE;
 DROP TABLE IF EXISTS token_tb CASCADE;
 DROP TABLE IF EXISTS account_tb CASCADE;

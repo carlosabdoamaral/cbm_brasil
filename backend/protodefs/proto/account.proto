@@ -7,6 +7,7 @@ import "google/protobuf/timestamp.proto";
 
 service AccountService {
     rpc Create(NewAccountRequest) returns (StatusResponse) {};
+    rpc GetAll(Empty) returns (GetAllAccountsResponse) {};
     rpc PublicDetails(Id) returns (AccountPublicInfos) {};
     rpc PrivateDetails(Id) returns (AccountPrivateInfos) {};
     rpc Edit(AccountPrivateInfos) returns (AccountPrivateInfos) {};
@@ -14,6 +15,10 @@ service AccountService {
     rpc SoftDelete(Id) returns (StatusResponse) {};
     rpc Restore(Id) returns (StatusResponse) {};
     rpc GenerateToken(Id) returns (Token) {};
+}
+
+message GetAllAccountsResponse {
+    repeated AccountPublicInfos accounts = 1;
 }
 
 message Token {

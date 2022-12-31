@@ -19,6 +19,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AccountServiceClient interface {
 	Create(ctx context.Context, in *NewAccountRequest, opts ...grpc.CallOption) (*StatusResponse, error)
+	GetAll(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*GetAllAccountsResponse, error)
 	PublicDetails(ctx context.Context, in *Id, opts ...grpc.CallOption) (*AccountPublicInfos, error)
 	PrivateDetails(ctx context.Context, in *Id, opts ...grpc.CallOption) (*AccountPrivateInfos, error)
 	Edit(ctx context.Context, in *AccountPrivateInfos, opts ...grpc.CallOption) (*AccountPrivateInfos, error)
@@ -39,6 +40,15 @@ func NewAccountServiceClient(cc grpc.ClientConnInterface) AccountServiceClient {
 func (c *accountServiceClient) Create(ctx context.Context, in *NewAccountRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
 	out := new(StatusResponse)
 	err := c.cc.Invoke(ctx, "/proto.AccountService/Create", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *accountServiceClient) GetAll(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*GetAllAccountsResponse, error) {
+	out := new(GetAllAccountsResponse)
+	err := c.cc.Invoke(ctx, "/proto.AccountService/GetAll", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -113,6 +123,7 @@ func (c *accountServiceClient) GenerateToken(ctx context.Context, in *Id, opts .
 // for forward compatibility
 type AccountServiceServer interface {
 	Create(context.Context, *NewAccountRequest) (*StatusResponse, error)
+	GetAll(context.Context, *Empty) (*GetAllAccountsResponse, error)
 	PublicDetails(context.Context, *Id) (*AccountPublicInfos, error)
 	PrivateDetails(context.Context, *Id) (*AccountPrivateInfos, error)
 	Edit(context.Context, *AccountPrivateInfos) (*AccountPrivateInfos, error)
@@ -129,6 +140,9 @@ type UnimplementedAccountServiceServer struct {
 
 func (UnimplementedAccountServiceServer) Create(context.Context, *NewAccountRequest) (*StatusResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
+}
+func (UnimplementedAccountServiceServer) GetAll(context.Context, *Empty) (*GetAllAccountsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAll not implemented")
 }
 func (UnimplementedAccountServiceServer) PublicDetails(context.Context, *Id) (*AccountPublicInfos, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PublicDetails not implemented")
@@ -178,6 +192,24 @@ func _AccountService_Create_Handler(srv interface{}, ctx context.Context, dec fu
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AccountServiceServer).Create(ctx, req.(*NewAccountRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AccountService_GetAll_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AccountServiceServer).GetAll(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto.AccountService/GetAll",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AccountServiceServer).GetAll(ctx, req.(*Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -318,6 +350,10 @@ var AccountService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Create",
 			Handler:    _AccountService_Create_Handler,
+		},
+		{
+			MethodName: "GetAll",
+			Handler:    _AccountService_GetAll_Handler,
 		},
 		{
 			MethodName: "PublicDetails",

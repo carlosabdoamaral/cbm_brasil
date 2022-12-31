@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/carlosabdoamaral/cbm_brasil/backend/internal/database"
 	"github.com/carlosabdoamaral/cbm_brasil/backend/internal/handlers"
+	grpcservice "github.com/carlosabdoamaral/cbm_brasil/backend/internal/services/grpc_service"
 	"github.com/carlosabdoamaral/cbm_brasil/backend/internal/utils"
 	"github.com/gin-gonic/gin"
 )
@@ -10,13 +11,16 @@ import (
 func main() {
 	utils.ReadEnvFile()
 	database.Connect()
+	grpcservice.ConnectToGrpcServer()
 	InitApi()
+
 }
 
 func InitApi() {
 	router := gin.Default()
 	router.Use(CORS())
 
+	// TODO: Create sql querys
 	tutorialRoutes := router.Group("/tutorials")
 	tutorialRoutes.GET("/list", handlers.GetAllTutorials)
 	tutorialRoutes.GET("/single", handlers.GetTutorialById)
@@ -33,6 +37,7 @@ func InitApi() {
 	occurrenceRoutes.PUT("/update", handlers.UpdateOccurrenceById)
 	occurrenceRoutes.DELETE("/soft-delete", handlers.SoftDeleteOccurrenceById)
 
+	// Doing...
 	accountRoutes := router.Group("/account")
 	accountRoutes.GET("/list", handlers.GetAllAccounts)
 	accountRoutes.GET("/private", handlers.GetAccountPrivateDetails)

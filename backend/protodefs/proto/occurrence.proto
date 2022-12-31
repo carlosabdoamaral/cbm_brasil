@@ -27,6 +27,7 @@ message NewOccurrence {
     repeated OccurrenceTag tags = 7;
 }
 
+// AJUSTAR!
 message OccurrenceDetails {
     int64 id = 1;
     AccountPublicInfos author = 2;

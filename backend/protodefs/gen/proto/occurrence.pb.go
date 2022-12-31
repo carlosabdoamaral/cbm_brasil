@@ -154,6 +154,7 @@ func (x *NewOccurrence) GetTags() []*OccurrenceTag {
 	return nil
 }
 
+// AJUSTAR!
 type OccurrenceDetails struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
