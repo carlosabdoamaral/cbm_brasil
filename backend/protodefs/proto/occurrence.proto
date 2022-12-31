@@ -3,6 +3,7 @@ package proto;
 option go_package = "./proto";
 
 import "common.proto";
+import "account.proto";
 
 service OccurrenceService {
     rpc GetAll(Empty) returns (OccurrenceDetailsList) {};
@@ -28,7 +29,7 @@ message NewOccurrence {
 
 message OccurrenceDetails {
     int64 id = 1;
-    string author = 2;
+    AccountPublicInfos author = 2;
     string title = 3;
     string description = 4;
     string image_base64 = 5;
@@ -38,5 +39,5 @@ message OccurrenceDetails {
 
 message OccurrenceTag {
     int64 id = 1;
-    string name = 2;
+    string title = 2;
 }

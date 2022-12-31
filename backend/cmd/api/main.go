@@ -33,6 +33,16 @@ func InitApi() {
 	occurrenceRoutes.PUT("/update", handlers.UpdateOccurrenceById)
 	occurrenceRoutes.DELETE("/soft-delete", handlers.SoftDeleteOccurrenceById)
 
+	accountRoutes := router.Group("/account")
+	accountRoutes.GET("/list", handlers.GetAllAccounts)
+	accountRoutes.GET("/private", handlers.GetAccountPrivateDetails)
+	accountRoutes.GET("/public", handlers.GetAccountPublicDetails)
+	accountRoutes.POST("/new", handlers.CreateAccount)
+	accountRoutes.POST("/generate-token", handlers.GenerateAccountToken)
+	accountRoutes.PUT("/update", handlers.UpdateAccountById)
+	accountRoutes.DELETE("/delete", handlers.DeleteAccountById)
+	accountRoutes.DELETE("/soft-delete", handlers.SoftDeleteAccountById)
+
 	router.Run()
 }
 
