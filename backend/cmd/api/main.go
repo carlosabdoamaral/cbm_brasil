@@ -1,12 +1,38 @@
 package main
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/carlosabdoamaral/cbm_brasil/backend/internal/database"
+	"github.com/carlosabdoamaral/cbm_brasil/backend/internal/handlers"
+	"github.com/carlosabdoamaral/cbm_brasil/backend/internal/utils"
+	"github.com/gin-gonic/gin"
+)
 
 func main() {
+	utils.ReadEnvFile()
+	database.Connect()
+	InitApi()
+}
+
+func InitApi() {
 	router := gin.Default()
 	router.Use(CORS())
 
-	router.Group("/")
+	tutorialRoutes := router.Group("/tutorials")
+	tutorialRoutes.GET("/list", handlers.GetAllTutorials)
+	tutorialRoutes.GET("/single", handlers.GetTutorialById)
+	tutorialRoutes.POST("/new", handlers.CreateTutorial)
+	tutorialRoutes.PUT("/update", handlers.UpdateTutorialById)
+	tutorialRoutes.DELETE("/soft-delete", handlers.SoftDeleteTutorialById)
+	tutorialRoutes.DELETE("/delete", handlers.DeleteTutorialById)
+
+	occurrenceRoutes := router.Group("/occurrences")
+	occurrenceRoutes.GET("/list", handlers.GetAllOccurrences)
+	occurrenceRoutes.GET("/by-id", handlers.GetOccurrenceById)
+	occurrenceRoutes.GET("/nearby", handlers.GetOccurrencesNearby)
+	occurrenceRoutes.POST("/new", handlers.CreateOccurrence)
+	occurrenceRoutes.PUT("/update", handlers.UpdateOccurrenceById)
+	occurrenceRoutes.DELETE("/soft-delete", handlers.SoftDeleteOccurrenceById)
+
 	router.Run()
 }
 

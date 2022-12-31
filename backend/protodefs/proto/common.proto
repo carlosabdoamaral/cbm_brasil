@@ -1,0 +1,17 @@
+syntax = "proto3";
+package proto;
+option go_package = "./proto";
+
+message Empty { }
+message Id {
+    int64 id = 1;
+}
+
+message StatusResponse {
+    string code = 1;
+}
+
+message Location {
+    float latitude = 1;
+    float longitude = 2;
+}

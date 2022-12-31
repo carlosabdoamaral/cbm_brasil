@@ -1,0 +1,48 @@
+syntax = "proto3";
+package proto;
+option go_package = "./proto";
+
+import "common.proto";
+import "google/protobuf/timestamp.proto";
+
+service AccountService {
+    rpc Create(NewAccountRequest) returns (StatusResponse) {};
+    rpc PublicDetails(Id) returns (AccountPublicInfos) {};
+    rpc PrivateDetails(Id) returns (AccountPrivateInfos) {};
+    rpc Edit(AccountPrivateInfos) returns (AccountPrivateInfos) {};
+    rpc Delete(Id) returns (StatusResponse) {};
+    rpc SoftDelete(Id) returns (StatusResponse) {};
+    rpc Restore(Id) returns (StatusResponse) {};
+    rpc GenerateToken(Id) returns (Token) {};
+}
+
+message Token {
+    string code = 1;
+    google.protobuf.Timestamp created_at = 2;
+}
+
+message NewAccountRequest {
+    string name = 1;
+    string email = 2;
+    Location default_location = 3;
+    string password = 4;
+}
+
+message AccountPrivateInfos {
+    int64 id = 1;
+    string name = 2;
+    string email = 3;
+    Location default_location = 4;
+    Token token = 5;
+    string password = 6;
+    bool is_deleted = 7;
+    google.protobuf.Timestamp created_at = 8;
+    google.protobuf.Timestamp updated_at = 9;
+}
+
+message AccountPublicInfos {
+    int64 id = 1;
+    string name = 2;
+    string email = 3;
+    google.protobuf.Timestamp created_at = 4;
+}

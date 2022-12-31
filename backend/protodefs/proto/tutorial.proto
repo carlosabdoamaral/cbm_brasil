@@ -1,0 +1,50 @@
+syntax = "proto3";
+package proto;
+option go_package = "./proto";
+
+import "common.proto";
+import "google/protobuf/timestamp.proto";
+
+
+service TutorialService {
+    rpc GetAll(Empty) returns (TutorialDetailsList) {};
+    rpc GetById(Id) returns (TutorialDetails) {};
+    rpc Create(NewTutorial) returns (StatusResponse) {};
+    rpc Update(TutorialDetails) returns (StatusResponse) {};
+    rpc SoftDelete(Id) returns (StatusResponse) {};
+    rpc Delete(Id) returns (StatusResponse) {};
+}
+
+message NewStep {
+    string title = 2;
+    string image_base64 = 3;
+}
+
+message StepDetails {
+    int64 id = 1;
+    int64 step_number = 2;
+    string title = 3;
+    string image_base64 = 4;
+}
+
+message NewTutorial {
+    int64 author_id = 1;
+    string title = 2;
+    string description = 3;
+    repeated NewStep steps = 4;
+}
+
+message TutorialDetails {
+    int64 id = 1;
+    int64 author_id = 2;
+    string title = 3;
+    string description = 4;
+    repeated NewStep steps = 5;
+    int64 viewed_by = 6; // How many users saw the tutorial
+    google.protobuf.Timestamp created_at = 7;
+    google.protobuf.Timestamp updated_at = 8;
+}
+
+message TutorialDetailsList {
+    repeated TutorialDetails tutorials = 1;
+}
