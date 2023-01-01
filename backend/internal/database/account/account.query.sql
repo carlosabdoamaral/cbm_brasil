@@ -50,7 +50,7 @@ WHERE
 
 -- Create account
 INSERT INTO account_tb(name, email, password) VALUES ('Carlos Amaral', 'carlos@gmail.com', 'Senha_admin123');
-INSERT INTO account_location_tb(id_account, latitude, longitude) VALUES (1, 0000, 0000);
+INSERT INTO account_location_tb(id_account, latitude, longitude) VALUES (1, '0000', '0000');
 
 
 

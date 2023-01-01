@@ -14,6 +14,6 @@ message StatusResponse {
 }
 
 message Location {
-    float latitude = 1;
-    float longitude = 2;
+    string latitude = 1;
+    string longitude = 2;
 }

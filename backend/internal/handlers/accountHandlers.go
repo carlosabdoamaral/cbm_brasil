@@ -27,7 +27,7 @@ func GetAllAccounts(c *gin.Context) {
 			Id:        account.GetId(),
 			Name:      account.GetName(),
 			Email:     account.GetEmail(),
-			CreatedAt: account.GetCreatedAt(),
+			CreatedAt: account.GetCreatedAt().AsTime(),
 		})
 	}
 
@@ -54,23 +54,16 @@ func GetAccountPrivateDetails(c *gin.Context) {
 		return
 	}
 
-	c.IndentedJSON(http.StatusOK, &models.AccountPrivateInfos{
-		Id:    grpcRes.GetId(),
-		Name:  grpcRes.GetName(),
-		Email: grpcRes.GetEmail(),
-		Location: models.Location{
-			Latitude:  grpcRes.GetDefaultLocation().GetLatitude(),
-			Longitude: grpcRes.GetDefaultLocation().GetLongitude(),
-		},
-		Token: models.Token{
-			Code:      grpcRes.GetToken().GetCode(),
-			CreatedAt: grpcRes.GetToken().GetCreatedAt(),
-		},
-		Password:  grpcRes.GetPassword(),
-		IsDeleted: grpcRes.GetIsDeleted(),
-		CreatedAt: grpcRes.GetCreatedAt(),
-		UpdatedAt: grpcRes.GetUpdatedAt(),
-	})
+	res, err := common.ProtoToJwt(grpcRes)
+	if err != nil {
+		c.IndentedJSON(http.StatusInternalServerError, err)
+		return
+	}
+
+	// c.IndentedJSON(http.StatusOK, &models.JwtToken{
+	// 	Jwt: res,
+	// })
+	c.IndentedJSON(http.StatusOK, string(res))
 }
 
 func GetAccountPublicDetails(c *gin.Context) {
@@ -93,15 +86,20 @@ func GetAccountPublicDetails(c *gin.Context) {
 		return
 	}
 
-	c.IndentedJSON(http.StatusOK, &models.AccountPublicInfos{
-		Id:        grpcRes.GetId(),
-		Name:      grpcRes.GetName(),
-		Email:     grpcRes.GetEmail(),
-		CreatedAt: grpcRes.GetCreatedAt(),
+	res, err := common.ProtoToJwt(grpcRes)
+	if err != nil {
+		c.IndentedJSON(http.StatusInternalServerError, err)
+		return
+	}
+
+	c.IndentedJSON(http.StatusOK, &models.JwtToken{
+		Jwt: res,
 	})
 }
 
-func CreateAccount(c *gin.Context)     {}
+func CreateAccount(c *gin.Context) {
+
+}
 func UpdateAccountById(c *gin.Context) {}
 
 func GenerateAccountToken(c *gin.Context) {}

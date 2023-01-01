@@ -34,7 +34,7 @@ func (s *AccountServer) PrivateDetails(ctx context.Context, req *pb.Id) (*pb.Acc
 }
 
 func (s *AccountServer) PublicDetails(ctx context.Context, req *pb.Id) (*pb.AccountPublicInfos, error) {
-	common.LogInfo("[GRPC] Public")
+	common.LogInfo("[GRPC] PublicDetails")
 
 	res, err := AccountDb.GetPublicInfosById(ctx, req)
 	if err != nil {

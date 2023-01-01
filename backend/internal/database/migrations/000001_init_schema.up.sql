@@ -15,8 +15,8 @@ CREATE TABLE account_tb (
 CREATE TABLE account_location_tb (
     id SERIAL PRIMARY KEY ,
     id_account INT REFERENCES account_tb(id),
-    latitude FLOAT NOT NULL,
-    longitude FLOAT NOT NULL
+    latitude VARCHAR(255) NOT NULL,
+    longitude VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE token_tb (
@@ -44,8 +44,8 @@ CREATE TABLE occurrence_tb (
 CREATE TABLE occurrence_location_tb (
     id SERIAL PRIMARY KEY,
     id_occurrence INT REFERENCES occurrence_tb(id),
-    latitude FLOAT NOT NULL,
-    longitude FLOAT NOT NULL
+    latitude VARCHAR(255) NOT NULL,
+    longitude VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE occurrence_tag_tb(
