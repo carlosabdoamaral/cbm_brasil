@@ -1,8 +1,6 @@
 package handlers
 
 import (
-	"encoding/json"
-	"io/ioutil"
 	"net/http"
 
 	"github.com/carlosabdoamaral/cbm_brasil/backend/common"
@@ -16,10 +14,7 @@ func GetAllAccounts(c *gin.Context) {
 		Dummy: "ABCDEF",
 	}
 	grpcRes, err := common.AccountServiceClient.GetAll(c, model)
-	if err != nil {
-		c.IndentedJSON(http.StatusInternalServerError, err)
-		return
-	}
+	common.CheckError(c, err, true)
 
 	var res []*models.AccountPublicInfos
 	for _, account := range grpcRes.GetAccounts() {
@@ -35,70 +30,30 @@ func GetAllAccounts(c *gin.Context) {
 }
 
 func GetAccountPrivateDetails(c *gin.Context) {
-	body, err := ioutil.ReadAll(c.Request.Body)
-	if err != nil {
-		c.IndentedJSON(http.StatusInternalServerError, err.Error())
-		return
-	}
-
 	id := &pb.Id{}
-	err = json.Unmarshal(body, &id)
-	if err != nil {
-		c.IndentedJSON(http.StatusInternalServerError, err.Error())
-		return
-	}
+	common.UnmarshalJson(c, &id)
 
 	grpcRes, err := common.AccountServiceClient.PrivateDetails(c, id)
-	if err != nil {
-		c.IndentedJSON(http.StatusInternalServerError, err)
-		return
-	}
+	common.CheckError(c, err, true)
 
-	res, err := common.ProtoToJwt(grpcRes)
-	if err != nil {
-		c.IndentedJSON(http.StatusInternalServerError, err)
-		return
-	}
-
-	// c.IndentedJSON(http.StatusOK, &models.JwtToken{
-	// 	Jwt: res,
-	// })
-	c.IndentedJSON(http.StatusOK, string(res))
+	common.BuildAndReturnApiResponse(c, grpcRes)
 }
 
 func GetAccountPublicDetails(c *gin.Context) {
-	body, err := ioutil.ReadAll(c.Request.Body)
-	if err != nil {
-		c.IndentedJSON(http.StatusInternalServerError, err.Error())
-		return
-	}
+	model := &pb.Id{}
+	common.UnmarshalJson(c, &model)
 
-	id := &pb.Id{}
-	err = json.Unmarshal(body, &id)
-	if err != nil {
-		c.IndentedJSON(http.StatusInternalServerError, err.Error())
-		return
-	}
+	grpcRes, err := common.AccountServiceClient.PublicDetails(c, model)
+	common.CheckError(c, err, true)
 
-	grpcRes, err := common.AccountServiceClient.PublicDetails(c, id)
-	if err != nil {
-		c.IndentedJSON(http.StatusInternalServerError, err)
-		return
-	}
-
-	res, err := common.ProtoToJwt(grpcRes)
-	if err != nil {
-		c.IndentedJSON(http.StatusInternalServerError, err)
-		return
-	}
-
-	c.IndentedJSON(http.StatusOK, &models.JwtToken{
-		Jwt: res,
-	})
+	common.BuildAndReturnApiResponse(c, grpcRes)
 }
 
 func CreateAccount(c *gin.Context) {
+	model := &pb.NewAccountRequest{}
+	common.UnmarshalJson(c, &model)
 
+	c.IndentedJSON(http.StatusOK, model)
 }
 func UpdateAccountById(c *gin.Context) {}
 

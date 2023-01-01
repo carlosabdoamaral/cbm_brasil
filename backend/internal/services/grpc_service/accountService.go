@@ -9,12 +9,9 @@ import (
 )
 
 func (s *AccountServer) GetAll(ctx context.Context, req *pb.Empty) (res *pb.GetAllAccountsResponse, err error) {
-	common.LogInfo("[GRPC] GetAll")
+	common.LogInfo("Starting grpc GetAll")
 	res, err = AccountDb.GetAll(ctx)
-	if err != nil {
-		common.LogError(err.Error())
-		return nil, err
-	}
+	common.CheckError(nil, err, false)
 
 	return &pb.GetAllAccountsResponse{
 		Accounts: res.GetAccounts(),
@@ -22,13 +19,8 @@ func (s *AccountServer) GetAll(ctx context.Context, req *pb.Empty) (res *pb.GetA
 }
 
 func (s *AccountServer) PrivateDetails(ctx context.Context, req *pb.Id) (*pb.AccountPrivateInfos, error) {
-	common.LogInfo("[GRPC] PrivateDetails")
-
 	res, err := AccountDb.GetPrivateInfosById(ctx, req)
-	if err != nil {
-		common.LogError(err.Error())
-		return nil, err
-	}
+	common.CheckError(nil, err, false)
 
 	return res, nil
 }
@@ -37,10 +29,7 @@ func (s *AccountServer) PublicDetails(ctx context.Context, req *pb.Id) (*pb.Acco
 	common.LogInfo("[GRPC] PublicDetails")
 
 	res, err := AccountDb.GetPublicInfosById(ctx, req)
-	if err != nil {
-		common.LogError(err.Error())
-		return nil, err
-	}
+	common.CheckError(nil, err, false)
 
 	return res, nil
 }

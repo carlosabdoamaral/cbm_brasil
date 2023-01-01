@@ -40,3 +40,7 @@ var (
 	TutorialServiceClient   = pb.NewTutorialServiceClient(GrpcConn)
 	OccurrenceServiceClient = pb.NewOccurrenceServiceClient(GrpcConn)
 )
+
+var (
+	UseJwtAsApiResponse = false
+)

@@ -1,19 +1,19 @@
 package main
 
 import (
+	"github.com/carlosabdoamaral/cbm_brasil/backend/common"
 	"github.com/carlosabdoamaral/cbm_brasil/backend/internal/database"
 	"github.com/carlosabdoamaral/cbm_brasil/backend/internal/handlers"
 	grpcservice "github.com/carlosabdoamaral/cbm_brasil/backend/internal/services/grpc_service"
-	"github.com/carlosabdoamaral/cbm_brasil/backend/internal/utils"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	utils.ReadEnvFile()
+	common.ReadFlags()
+	common.ReadEnvFile()
 	database.Connect()
 	grpcservice.ConnectToGrpcServer()
 	InitApi()
-
 }
 
 func InitApi() {

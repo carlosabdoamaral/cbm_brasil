@@ -1,3 +1,6 @@
+api_token:
+	go run cmd/api/main.go -token true
+
 api:
 	go run cmd/api/main.go
 
