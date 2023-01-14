@@ -1,20 +1,9 @@
 import { Store } from "react-notifications-component";
 
-export interface NewNotification {
-  title: string;
-  message: string;
-}
-
-export const NOTIFICATION_STATUS = {
-  SUCCESS: "Success",
-  WARNING: "Warning",
-  ERROR: "Error",
-};
-
-export function addSuccessNotification(notificationDetails: NewNotification) {
+export function addSuccessNotification(message: string) {
   Store.addNotification({
-    title: notificationDetails.title,
-    message: notificationDetails.message,
+    title: "Success",
+    message: message,
     type: "success",
     insert: "top",
     container: "top-right",
@@ -27,10 +16,10 @@ export function addSuccessNotification(notificationDetails: NewNotification) {
   });
 }
 
-export function addWarningNotification(notificationDetails: NewNotification) {
+export function addWarningNotification(message: string) {
   Store.addNotification({
-    title: notificationDetails.title,
-    message: notificationDetails.message,
+    title: "Warning",
+    message: message,
     type: "warning",
     insert: "top",
     container: "top-right",
@@ -43,11 +32,11 @@ export function addWarningNotification(notificationDetails: NewNotification) {
   });
 }
 
-export function addErrorNotification(notificationDetails: NewNotification) {
+export function addErrorNotification(message: string) {
   Store.addNotification({
-    title: notificationDetails.title,
-    message: notificationDetails.message,
-    type: "success",
+    title: "Error",
+    message: message,
+    type: "danger",
     insert: "top",
     container: "top-right",
     animationIn: ["animate__animated", "animate__fadeIn"],

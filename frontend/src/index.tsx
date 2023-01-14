@@ -14,7 +14,10 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <ReactNotifications />
-    <Controller />
+    <div>
+      <div style={{ height: "5px", background: "red" }} />
+      <Controller />
+    </div>
   </React.StrictMode>
 );
 

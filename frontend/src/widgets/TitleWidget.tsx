@@ -1,11 +1,11 @@
-import { Container, Header } from "semantic-ui-react";
+import { Container, Divider, Header } from "semantic-ui-react";
 import { TitleWidgetProps } from "../interfaces/TitleWidgetInterfaces";
 
 export function TitleWidget(props: TitleWidgetProps) {
   return (
-    <Container style={{ marginTop: "3em" }}>
+    <div style={{ margin: "2em 0" }}>
       <Header as={"h2"}>{props.title}</Header>
       <Header.Subheader>{props.subtitle}</Header.Subheader>
-    </Container>
+    </div>
   );
 }

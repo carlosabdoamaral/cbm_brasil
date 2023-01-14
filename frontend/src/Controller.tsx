@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { HomePage } from "./pages/HomePage";
-import { NewOcurrencePage } from "./pages/NewOcurrencePage";
+import { NewOcurrencePage } from "./pages/NewOccurrencePage";
 
 export function Controller() {
   return (
