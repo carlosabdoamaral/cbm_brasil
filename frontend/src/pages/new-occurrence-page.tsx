@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import {
   Button,
   Container,
@@ -6,6 +7,7 @@ import {
   Form,
   Grid,
   Header,
+  Icon,
   Loader,
   Select,
 } from "semantic-ui-react";
@@ -17,7 +19,7 @@ import {
   addWarningNotification,
 } from "../utils/notifications";
 import { GetOperationalSystem } from "../utils/operational-system";
-import Spacer from "../widgets/SpacerWidget";
+import Spacer from "../widgets/spacer-widget";
 
 export function NewOcurrencePage() {
   const categoryOptions = [
@@ -80,12 +82,17 @@ export function NewOcurrencePage() {
 
   function renderHeader() {
     return (
-      <Header
-        as="h1"
-        style={{ fontSize: 35, fontFamily: "poppins", fontWeight: 500 }}
-      >
-        Crie sua ocorrência <br /> agora mesmo 🧯
-      </Header>
+      <>
+        <Link to={"/"}>
+          <Icon name="arrow left" color="black" />
+        </Link>
+        <Header
+          as="h1"
+          style={{ fontSize: 35, fontFamily: "poppins", fontWeight: 500 }}
+        >
+          Crie sua ocorrência <br /> agora mesmo 🧯
+        </Header>
+      </>
     );
   }
 

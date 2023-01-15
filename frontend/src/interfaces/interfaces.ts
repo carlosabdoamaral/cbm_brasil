@@ -1,9 +1,23 @@
 export interface NewOccurrenceRequestInterface {
-  AccountId: number;
+  AccountId: Number;
   CreatedAt: Date;
-  System: string;
-  Title: string;
-  Description: string;
-  Image: string;
-  Location: string;
+  System: String;
+  Title: String;
+  Description: String;
+  Image: String;
+  Location: String;
+}
+
+export interface OccurrenceDetailsInterface {
+  AccountId: Number;
+  OccurrenceId: Number;
+  CreatedAt: Date;
+  System: String;
+  Title: String;
+  Description: String;
+  Image: String;
+  Location: String;
+  Tags: String[];
+  AlreadyAnswered: Boolean;
+  AcceptedBy: string;
 }

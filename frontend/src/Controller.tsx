@@ -1,13 +1,13 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { HomePage } from "./pages/HomePage";
-import { NewOcurrencePage } from "./pages/NewOccurrencePage";
+import { HomePage } from "./pages/home-page";
+import { NewOcurrencePage } from "./pages/new-occurrence-page";
 
 export function Controller() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/new-ocurrence" element={<NewOcurrencePage />} />
+        <Route path="/new-occurrence" element={<NewOcurrencePage />} />
       </Routes>
     </BrowserRouter>
   );
