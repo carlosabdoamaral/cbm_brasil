@@ -207,13 +207,18 @@ export function HomePage() {
       </Container>
 
       <Spacer height={40} />
+      {renderHowToUseSection()}
+      
+      <Spacer height={40} />
+      <Container>
+        <Divider />
+      </Container>
+
+      <Spacer height={40} />
       <Container>{renderOccurrencesSection()}</Container>
 
       <Spacer height={40} />
       {renderProjectObjectiveSection()}
-
-      <Spacer height={40} />
-      {renderHowToUseSection()}
 
       <Spacer height={40} />
       <Container>
