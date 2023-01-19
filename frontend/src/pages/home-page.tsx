@@ -115,12 +115,14 @@ export function HomePage() {
       <>
         {renderSectionTitle()}
         <Spacer height={20} />
+
         {isShowingAllOccurrences
           ? renderOccurrencesListUnlimited()
           : renderOccurrencesListLimited()}
 
         <Spacer height={20} />
-        {isShowingAllOccurrences ? (
+
+        {isShowingAllOccurrences && (
           <Button
             fluid
             content={"Exibir as 6 mais recentes"}
@@ -129,7 +131,9 @@ export function HomePage() {
               setIsShowingAllOccurrences(!isShowingAllOccurrences);
             }}
           />
-        ) : (
+        )}
+
+        {!isShowingAllOccurrences && occurrences!.length > 6 && (
           <Button
             fluid
             content={`Exibir todas as ${occurrences?.length} ocorrências`}
@@ -208,7 +212,7 @@ export function HomePage() {
 
       <Spacer height={40} />
       {renderHowToUseSection()}
-      
+
       <Spacer height={40} />
       <Container>
         <Divider />
