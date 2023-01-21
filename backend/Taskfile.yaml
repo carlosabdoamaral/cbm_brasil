@@ -1,0 +1,18 @@
+version: "3"
+
+tasks:
+  migrate-up:
+    cmds:
+      - migrate -path ./internal/persistence/migrations -database "postgresql://postgres:postgres@localhost:5432/postgres?sslmode=disable" -verbose up
+
+  migrate-down:
+    cmds:
+      - migrate -path ./internal/persistence/migrations -database "postgresql://postgres:postgres@localhost:5432/postgres?sslmode=disable" -verbose down
+
+  create-migration:
+    cmds:
+      - migrate create -ext sql -dir ./internal/persistence/migrations -seq init_data
+
+  docker:
+    cmds:
+      - cd deployment/ && docker-compose up -d
