@@ -11,7 +11,16 @@ import {
   Loader,
   Select,
 } from "semantic-ui-react";
-import { NewOccurrenceRequestInterface } from "../interfaces/interfaces";
+import {
+  AddressInterface,
+  NewOccurrenceRequestInterface,
+} from "../interfaces/interfaces";
+import {
+  addressInterfaceIsEmpty,
+  emtpyAddr,
+  formatCEP,
+  getCEPDetails,
+} from "../utils/cep";
 import { doPost } from "../utils/http";
 import {
   addErrorNotification,
@@ -28,28 +37,47 @@ export function NewOcurrencePage() {
     { key: "ANIMALS", text: "Animal em perigo", value: "ANIMALS" },
   ];
 
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [image, setImage] = useState("");
-  const [location, setLocation] = useState("");
+  const [title, setTitle] = useState(String);
+  const [image, setImage] = useState(String);
+  const [CEP, setCEP] = useState(String);
   const [category, setCategory] = useState(Object);
   const [isLoading, setIsLoading] = useState(false);
+  const [country, setCountry] = useState(String);
+  const [state, setState] = useState(String);
+  const [city, setCity] = useState(String);
+  const [neighborhood, setNeighborhood] = useState(String);
+  const [street, setStreet] = useState(String);
+  const [placeNumber, setPlaceNumber] = useState(String);
+  const [placeNotes, setPlaceNotes] = useState(String);
 
   function allRequiredFieldsAreFilled(): boolean {
-    return !!title && !!description && !!image && !!location && !!category;
+    return !!title && !!image && !!CEP && !!category;
   }
 
-  function handleSubmit() {
+  function updateAddressInfos(infos: AddressInterface) {
+    setCountry(infos.Country);
+    setState(infos.State);
+    setCity(infos.City);
+    setNeighborhood(infos.Neighborhood);
+    setStreet(infos.Street);
+  }
+
+  async function handleSubmit() {
     if (allRequiredFieldsAreFilled()) {
       setIsLoading(true);
+
+      let addr = await getCEPDetails(CEP);
+      if (addressInterfaceIsEmpty(addr)) {
+        return;
+      }
+
       const body: NewOccurrenceRequestInterface = {
         AccountId: 1,
         CreatedAt: new Date(),
         System: GetOperationalSystem(),
         Title: title,
-        Description: description,
         Image: image,
-        Location: location,
+        Location: addr,
       };
 
       doPost("/api/", body)
@@ -70,9 +98,15 @@ export function NewOcurrencePage() {
 
   function handleClearValues(mustNotify: boolean = false) {
     setTitle("");
-    setDescription("");
     setImage("");
-    setLocation("");
+    setCEP("");
+    setCountry("");
+    setState("");
+    setCity("");
+    setNeighborhood("");
+    setStreet("");
+    setPlaceNumber("");
+    setPlaceNotes("");
     setCategory({ key: "", text: "", value: "" });
 
     if (mustNotify) {
@@ -100,71 +134,81 @@ export function NewOcurrencePage() {
     return (
       <Form>
         <Grid columns={2}>
-          <Grid.Row>
-            <Grid.Column>
-              <Form.Input
-                fluid
-                label="Título"
-                placeholder="Título"
-                value={title}
-                onChange={(_, data) => {
-                  setTitle(data.value);
-                }}
-              />
-            </Grid.Column>
-            <Grid.Column>
-              <Form.Input
-                fluid
-                label="Localização"
-                placeholder="Localização"
-                value={location}
-                onChange={(_, data) => {
-                  setLocation(data.value);
-                }}
-              />
-            </Grid.Column>
-          </Grid.Row>
+          <Grid.Column>
+            <Form.Input
+              fluid
+              label="Título"
+              placeholder="Título"
+              value={title}
+              onChange={(_, data) => {
+                setTitle(data.value);
+              }}
+            />
+          </Grid.Column>
 
-          <Grid.Row>
-            <Grid.Column>
-              <Form.Select
-                label="Categoria"
-                onChange={(_, data) => {
-                  const category = categoryOptions.filter(
-                    (category) => category.value === data.value
-                  );
+          <Grid.Column>
+            <Form.Select
+              label="Categoria"
+              onChange={(_, data) => {
+                const category = categoryOptions.filter(
+                  (category) => category.value === data.value
+                );
 
-                  setCategory(category);
-                }}
-                options={categoryOptions}
-                placeholder="Categoria"
-                value={category.value}
-              />
-            </Grid.Column>
-            <Grid.Column>
-              <Form.Input
-                type="file"
-                fluid
-                label="Imagem"
-                placeholder="Imagem"
-                onChange={(_, data) => {
-                  setImage(data.value);
-                }}
-              />
-            </Grid.Column>
-          </Grid.Row>
+                setCategory(category);
+              }}
+              options={categoryOptions}
+              placeholder="Categoria"
+              value={category.value}
+            />
+          </Grid.Column>
+
+          <Grid.Column>
+            <Form.Input
+              fluid
+              label={"CEP"}
+              placeholder="CEP"
+              value={CEP}
+              maxLength={8}
+              onChange={async (_, data) => {
+                updateAddressInfos(emtpyAddr);
+                setCEP(formatCEP(data.value));
+
+                if (data.value.length >= 8) {
+                  let addr = await getCEPDetails(data.value);
+                  if (addressInterfaceIsEmpty(addr)) {
+                    return;
+                  }
+
+                  updateAddressInfos(addr);
+                }
+              }}
+            />
+            <small>
+              {!!CEP &&
+              CEP.length > 8 &&
+              !!country &&
+              !!state &&
+              !!city &&
+              !!street
+                ? `${country}, ${state}, ${city}, ${street}`
+                : ""}
+            </small>
+          </Grid.Column>
+
+          <Grid.Column>
+            <Form.Input
+              type="file"
+              fluid
+              label="Imagem"
+              placeholder="Imagem"
+              onChange={(_, data) => {
+                setImage(data.value);
+              }}
+            />
+          </Grid.Column>
         </Grid>
 
         <Spacer height={20} />
-
-        <Form.TextArea
-          fluid
-          label="About"
-          placeholder="Tell us more about you..."
-          onChange={(_, data) => {
-            setDescription(data.value!.toString());
-          }}
-        />
 
         <Spacer height={10} />
 

@@ -15,6 +15,7 @@ import { GenerateMock } from "../mocks/gen";
 import OccurrenceCardWidget from "../widgets/occurrence-card-widget";
 import Spacer from "../widgets/spacer-widget";
 import firefighters from "../assets/images/firefighters.jpeg";
+import { NavbarWidget } from "../widgets/navbar-widget";
 
 export function HomePage() {
   const maxOccurrences = 6;
@@ -147,87 +148,19 @@ export function HomePage() {
     );
   }
 
-  function renderProjectObjectiveSection() {
-    return (
-      <div style={{ background: COLORS.defaultRed, padding: "3em" }}>
-        <Container>
-          <Header
-            as={"h2"}
-            content="Objetivo do projeto"
-            style={{ color: "#FFF" }}
-          />
-          <p style={{ color: "#FFF", fontFamily: "poppins", fontWeight: 200 }}>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut a dolore
-            facere laboriosam ducimus possimus assumenda vitae eius, provident
-            in quidem earum quis. Veritatis quas ex earum, natus omnis adipisci.
-            Assumenda, fugiat. Laboriosam explicabo cupiditate, beatae
-            voluptatem atque dolor facilis. Distinctio inventore facere nam
-            minima fugiat eius natus non itaque? Modi vero repudiandae
-            perferendis autem nemo sunt atque, officiis eos. Lorem ipsum dolor
-            sit amet consectetur adipisicing elit. Ut a dolore facere laboriosam
-            ducimus possimus assumenda vitae eius, provident in quidem earum
-            quis. Veritatis quas ex earum, natus omnis adipisci. Assumenda,
-            fugiat. Laboriosam explicabo cupiditate, beatae voluptatem atque
-            dolor facilis. Distinctio inventore facere nam minima fugiat eius
-            natus non itaque? Modi vero repudiandae perferendis autem nemo sunt
-            atque, officiis eos.
-          </p>
-        </Container>
-      </div>
-    );
-  }
-
-  function renderHowToUseSection() {
-    return (
-      <Container>
-        <Header as={"h2"} content="Como usar a plataforma" />
-        <p style={{ fontFamily: "poppins", fontWeight: 200 }}>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut a dolore
-          facere laboriosam ducimus possimus assumenda vitae eius, provident in
-          quidem earum quis. Veritatis quas ex earum, natus omnis adipisci.
-          Assumenda, fugiat. Laboriosam explicabo cupiditate, beatae voluptatem
-          atque dolor facilis. Distinctio inventore facere nam minima fugiat
-          eius natus non itaque? Modi vero repudiandae perferendis autem nemo
-          sunt atque, officiis eos. Lorem ipsum dolor sit amet consectetur
-          adipisicing elit. Ut a dolore facere laboriosam ducimus possimus
-          assumenda vitae eius, provident in quidem earum quis. Veritatis quas
-          ex earum, natus omnis adipisci. Assumenda, fugiat. Laboriosam
-          explicabo cupiditate, beatae voluptatem atque dolor facilis.
-          Distinctio inventore facere nam minima fugiat eius natus non itaque?
-          Modi vero repudiandae perferendis autem nemo sunt atque, officiis eos.
-        </p>
-      </Container>
-    );
-  }
-
   return (
     <div style={{ paddingBottom: "3em" }}>
+      <NavbarWidget />
+
       <Spacer height={60} />
       <Container>{renderHeader()}</Container>
 
-      <Spacer height={40} />
-      <Container>
-        <Divider />
-      </Container>
-
-      <Spacer height={40} />
-      {renderHowToUseSection()}
-
-      <Spacer height={40} />
       <Container>
         <Divider />
       </Container>
 
       <Spacer height={40} />
       <Container>{renderOccurrencesSection()}</Container>
-
-      <Spacer height={40} />
-      {renderProjectObjectiveSection()}
-
-      <Spacer height={40} />
-      <Container>
-        <Divider />
-      </Container>
     </div>
   );
 }

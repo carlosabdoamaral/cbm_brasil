@@ -11,7 +11,7 @@ import {
 } from "semantic-ui-react";
 import { COLORS, SIGN_UP_FORMS } from "../enums/enums";
 import { AddressInterface } from "../interfaces/interfaces";
-import { getCEPDetails } from "../utils/cep";
+import { formatCEP, getCEPDetails } from "../utils/cep";
 import {
   addErrorNotification,
   addSuccessNotification,
@@ -54,26 +54,6 @@ export function SignUpPage() {
     setCity(infos.City);
     setNeighborhood(infos.Neighborhood);
     setStreet(infos.Street);
-  }
-
-  async function handleOnCEPChange(inputValue: string) {
-    var re = /^([\d]{5})\.*-*([\d]{3})/; // Pode usar ? no lugar do *
-    if (re.test(inputValue)) {
-      setCEP(inputValue.replace(re, "$1-$2"));
-
-      let addr = await getCEPDetails(inputValue);
-      if (addr.Country === "EMPTY") {
-        addErrorNotification(
-          "Não foi possível encontrar infomações do CEP fornecido"
-        );
-
-        return;
-      }
-
-      updateAddressInfos(addr);
-    } else {
-      setCEP(inputValue);
-    }
   }
 
   function handleClearForm() {
@@ -215,8 +195,21 @@ export function SignUpPage() {
               type={"text"}
               value={CEP}
               maxLength={9}
-              onChange={(_, data) => {
-                handleOnCEPChange(data.value);
+              onChange={async (_, data) => {
+                setCEP(formatCEP(data.value));
+
+                if (data.value.length >= 8) {
+                  let addr = await getCEPDetails(data.value);
+                  if (addr.Country === "EMPTY") {
+                    addErrorNotification(
+                      "Não foi possível encontrar infomações do CEP fornecido"
+                    );
+
+                    return;
+                  }
+
+                  updateAddressInfos(addr);
+                }
               }}
             />
           </Grid.Column>
