@@ -153,9 +153,8 @@ export function HomePage() {
       <NavbarWidget />
 
       <Spacer height={60} />
-      <Container>{renderHeader()}</Container>
-
       <Container>
+        {renderHeader()}
         <Divider />
       </Container>
 
