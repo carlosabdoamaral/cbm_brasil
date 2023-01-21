@@ -1,0 +1,15 @@
+syntax = "proto3";
+package proto;
+option go_package = "./proto";
+
+service AccountService {
+    rpc Create(NewAccountRequest) returns (JwtToken);
+}
+
+message JwtToken {
+    string token = 1;
+}
+
+message NewAccountRequest {
+    int64 id = 1;
+}
