@@ -22,8 +22,7 @@ func GetEnvVariables() error {
 	DatabaseDriver = os.Getenv("DB_DRIVER")
 
 	RabbitURL = os.Getenv("RABBIT_URL")
-	RabbitAccountQueueName = os.Getenv("RABBIT_ACCOUNT_SERVICE_QUEUENAME")
-	RabbitOccurrenceQueueName = os.Getenv("RABBIT_OCCURRENCE_SERVICE_QUEUENAME")
+	RabbitQueueName = os.Getenv("RABBIT_QUEUENAME")
 
 	return nil
 }

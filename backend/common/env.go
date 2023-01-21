@@ -34,11 +34,11 @@ var (
 	RabbitURL  = ""
 	RabbitPort = ""
 
-	RabbitConn                = &amqp.Connection{}
-	RabbitChannel             = &amqp.Channel{}
-	RabbitQueue               = &amqp.Queue{}
-	RabbitAccountQueueName    = "account_queue"
-	RabbitOccurrenceQueueName = "occurrence_queue"
+	RabbitConn    = &amqp.Connection{}
+	RabbitChannel = &amqp.Channel{}
+
+	RabbitQueueName = "cbmbr_queue"
+	RabbitQueue     = &amqp.Queue{}
 )
 
 var (
