@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion7
 type AccountServiceClient interface {
 	Create(ctx context.Context, in *NewAccountRequest, opts ...grpc.CallOption) (*AccountDetails, error)
 	GetById(ctx context.Context, in *GetAccountByIdRequest, opts ...grpc.CallOption) (*AccountDetails, error)
+	EditById(ctx context.Context, in *EditAccountByIdRequest, opts ...grpc.CallOption) (*AccountDetails, error)
 }
 
 type accountServiceClient struct {
@@ -48,12 +49,22 @@ func (c *accountServiceClient) GetById(ctx context.Context, in *GetAccountByIdRe
 	return out, nil
 }
 
+func (c *accountServiceClient) EditById(ctx context.Context, in *EditAccountByIdRequest, opts ...grpc.CallOption) (*AccountDetails, error) {
+	out := new(AccountDetails)
+	err := c.cc.Invoke(ctx, "/proto.AccountService/EditById", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AccountServiceServer is the server API for AccountService service.
 // All implementations must embed UnimplementedAccountServiceServer
 // for forward compatibility
 type AccountServiceServer interface {
 	Create(context.Context, *NewAccountRequest) (*AccountDetails, error)
 	GetById(context.Context, *GetAccountByIdRequest) (*AccountDetails, error)
+	EditById(context.Context, *EditAccountByIdRequest) (*AccountDetails, error)
 	mustEmbedUnimplementedAccountServiceServer()
 }
 
@@ -66,6 +77,9 @@ func (UnimplementedAccountServiceServer) Create(context.Context, *NewAccountRequ
 }
 func (UnimplementedAccountServiceServer) GetById(context.Context, *GetAccountByIdRequest) (*AccountDetails, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetById not implemented")
+}
+func (UnimplementedAccountServiceServer) EditById(context.Context, *EditAccountByIdRequest) (*AccountDetails, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method EditById not implemented")
 }
 func (UnimplementedAccountServiceServer) mustEmbedUnimplementedAccountServiceServer() {}
 
@@ -116,6 +130,24 @@ func _AccountService_GetById_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AccountService_EditById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EditAccountByIdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AccountServiceServer).EditById(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto.AccountService/EditById",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AccountServiceServer).EditById(ctx, req.(*EditAccountByIdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AccountService_ServiceDesc is the grpc.ServiceDesc for AccountService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -130,6 +162,10 @@ var AccountService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetById",
 			Handler:    _AccountService_GetById_Handler,
+		},
+		{
+			MethodName: "EditById",
+			Handler:    _AccountService_EditById_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

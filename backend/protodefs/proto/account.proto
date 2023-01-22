@@ -7,6 +7,28 @@ import "google/protobuf/timestamp.proto";
 service AccountService {
     rpc Create(NewAccountRequest) returns (AccountDetails);
     rpc GetById(GetAccountByIdRequest) returns (AccountDetails);
+    rpc EditById(EditAccountByIdRequest) returns (AccountDetails);
+}
+
+message EditAccountByIdRequest {
+    int64 id = 1;
+    string full_name = 2;
+    string email = 3;
+    string cpf = 4;
+    google.protobuf.Timestamp birth_date = 5;
+    string passwd = 6;
+    EditAccountByIdLocation location = 8;
+}
+
+message EditAccountByIdLocation {
+    string cep = 1;
+    string country = 2;
+    string state = 3;
+    string city = 4;
+    string neighborhood = 5;
+    string street = 6;
+    int64 place_number = 7;
+    string complement = 8;
 }
 
 message GetAccountByIdRequest {

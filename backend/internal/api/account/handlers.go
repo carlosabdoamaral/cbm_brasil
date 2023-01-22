@@ -59,5 +59,30 @@ func HandleFetchAccountByIdRequest(ctx *gin.Context) {
 
 	ctx.IndentedJSON(http.StatusOK, responses.NewAccountDetailsFromProtoToJSON(res))
 }
-func HandleEditAccountRequest(ctx *gin.Context)       {}
+
+func HandleEditAccountRequest(ctx *gin.Context) {
+	body, err := ioutil.ReadAll(ctx.Request.Body)
+	if err != nil {
+		common.LogError(err.Error())
+		ctx.IndentedJSON(http.StatusInternalServerError, err.Error())
+	}
+
+	jsonModel := responses.EditAccountJSON{}
+	err = json.Unmarshal(body, &jsonModel)
+	if err != nil {
+		common.LogError(err.Error())
+		ctx.IndentedJSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	protoMessage := responses.NewEditAccountBodyFromJSONToProto(&jsonModel)
+	res, err := common.AccountServiceClient.EditById(ctx.Request.Context(), protoMessage)
+	if err != nil {
+		common.LogError(err.Error())
+		ctx.IndentedJSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	ctx.IndentedJSON(http.StatusOK, responses.NewAccountDetailsFromProtoToJSON(res))
+}
 func HandleSoftDeleteAccountRequest(ctx *gin.Context) {}

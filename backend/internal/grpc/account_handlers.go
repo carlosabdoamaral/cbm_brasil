@@ -24,3 +24,12 @@ func (s *AccountServer) GetById(ctx context.Context, req *pb.GetAccountByIdReque
 
 	return res, nil
 }
+
+func (s *AccountServer) EditById(ctx context.Context, req *pb.EditAccountByIdRequest) (*pb.AccountDetails, error) {
+	res, err := persistence.EditAccountById(&ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
