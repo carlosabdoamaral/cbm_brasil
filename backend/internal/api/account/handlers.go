@@ -2,7 +2,6 @@ package account
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 
@@ -29,12 +28,10 @@ func HandleNewAccountRequest(ctx *gin.Context) {
 	res, err := common.AccountServiceClient.Create(ctx.Request.Context(), protoMessage)
 	if err != nil {
 		common.LogError(err.Error())
-		ctx.IndentedJSON(http.StatusBadRequest, err.Error())
+		ctx.IndentedJSON(http.StatusInternalServerError, err.Error())
 	}
 
-	fmt.Println(res)
-
-	// ctx.IndentedJSON(http.StatusOK, responses.NewJwtTokenFromProtoToJSON(res))
+	ctx.IndentedJSON(http.StatusOK, responses.NewAccountDetailsFromProtoToJSON(res))
 }
 
 func HandleFetchAccountByIdRequest(ctx *gin.Context)  {}

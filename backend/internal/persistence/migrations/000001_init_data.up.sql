@@ -1,16 +1,3 @@
-CREATE TABLE account_location_tb(
-    id SERIAL PRIMARY KEY,
-    id_account INT REFERENCES account_tb(id),
-    cep VARCHAR(8) NOT NULL,
-    country VARCHAR(255) NOT NULL,
-    state VARCHAR(255) NOT NULL,
-    city VARCHAR(255) NOT NULL,
-    neighborhood VARCHAR(255) NOT NULL,
-    street VARCHAR(255) NOT NULL,
-    place_number INT NOT NULL,
-    complement VARCHAR(255) NOT NULL
-);
-
 CREATE TABLE account_tb(
     id SERIAL PRIMARY KEY,
     full_name VARCHAR(255) NOT NULL,
@@ -22,4 +9,17 @@ CREATE TABLE account_tb(
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW(),
     soft_deleted BOOLEAN DEFAULT FALSE
+);
+
+CREATE TABLE account_location_tb(
+    id SERIAL PRIMARY KEY,
+    id_account INT REFERENCES account_tb(id),
+    cep VARCHAR(8) NOT NULL,
+    country VARCHAR(255) NOT NULL,
+    state VARCHAR(255) NOT NULL,
+    city VARCHAR(255) NOT NULL,
+    neighborhood VARCHAR(255) NOT NULL,
+    street VARCHAR(255) NOT NULL,
+    place_number INT NOT NULL,
+    complement VARCHAR(255) NOT NULL
 );

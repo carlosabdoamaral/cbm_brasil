@@ -18,7 +18,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AccountServiceClient interface {
-	Create(ctx context.Context, in *NewAccountRequest, opts ...grpc.CallOption) (*JwtToken, error)
+	Create(ctx context.Context, in *NewAccountRequest, opts ...grpc.CallOption) (*AccountDetails, error)
 }
 
 type accountServiceClient struct {
@@ -29,8 +29,8 @@ func NewAccountServiceClient(cc grpc.ClientConnInterface) AccountServiceClient {
 	return &accountServiceClient{cc}
 }
 
-func (c *accountServiceClient) Create(ctx context.Context, in *NewAccountRequest, opts ...grpc.CallOption) (*JwtToken, error) {
-	out := new(JwtToken)
+func (c *accountServiceClient) Create(ctx context.Context, in *NewAccountRequest, opts ...grpc.CallOption) (*AccountDetails, error) {
+	out := new(AccountDetails)
 	err := c.cc.Invoke(ctx, "/proto.AccountService/Create", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -42,7 +42,7 @@ func (c *accountServiceClient) Create(ctx context.Context, in *NewAccountRequest
 // All implementations must embed UnimplementedAccountServiceServer
 // for forward compatibility
 type AccountServiceServer interface {
-	Create(context.Context, *NewAccountRequest) (*JwtToken, error)
+	Create(context.Context, *NewAccountRequest) (*AccountDetails, error)
 	mustEmbedUnimplementedAccountServiceServer()
 }
 
@@ -50,7 +50,7 @@ type AccountServiceServer interface {
 type UnimplementedAccountServiceServer struct {
 }
 
-func (UnimplementedAccountServiceServer) Create(context.Context, *NewAccountRequest) (*JwtToken, error) {
+func (UnimplementedAccountServiceServer) Create(context.Context, *NewAccountRequest) (*AccountDetails, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
 }
 func (UnimplementedAccountServiceServer) mustEmbedUnimplementedAccountServiceServer() {}

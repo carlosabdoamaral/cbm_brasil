@@ -1,22 +1,20 @@
 version: "3.9"
 
 volumes:
-  dev-postgres-data:
+  db:
+    driver: local
 
 services:
-  dev-postgres:
-    container_name: dev-postgres
-    image: "postgres:13.6-alpine3.15"
-    env_file: ../.env
+  db:
+    image: postgres:14.1-alpine
+    restart: always
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: cbmbr
-      PGDATA: /var/lib/postgresql/data/pgdata
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
     ports:
       - "5432:5432"
     volumes:
-      - dev-postgres-data:/var/lib/postgresql/data
+      - db:/var/lib/postgresql/data
 
   rabbitmq:
     image: rabbitmq:3-management-alpine

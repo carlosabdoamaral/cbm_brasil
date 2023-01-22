@@ -5,20 +5,25 @@ import (
 
 	"github.com/carlosabdoamaral/cbm_brasil/backend/common"
 	pb "github.com/carlosabdoamaral/cbm_brasil/backend/protodefs/gen/proto"
-	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
-type NewAccountRequestJSON struct {
-	FullName      string                        `json:"full_name,omitempty"`
-	Email         string                        `json:"email,omitempty"`
-	Cpf           string                        `json:"cpf,omitempty"`
-	BirthDate     time.Time                     `json:"birth_date,omitempty"`
-	Password      string                        `json:"password,omitempty"`
-	TwoFactorCode string                        `json:"two_factor_code,omitempty"`
-	Location      NewAccountRequestLocationJSON `json:"location,omitempty"`
+type AccountDetailsRequestJSON struct {
+	Id            int64               `json:"id,omitempty"`
+	FullName      string              `json:"full_name,omitempty"`
+	Email         string              `json:"email,omitempty"`
+	Cpf           string              `json:"cpf,omitempty"`
+	BirthDate     time.Time           `json:"birth_date,omitempty"`
+	Password      string              `json:"password,omitempty"`
+	TwoFactorCode string              `json:"two_factor_code,omitempty"`
+	Location      LocationDetailsJSON `json:"location,omitempty"`
+	CreatedAt     time.Time           `json:"created_at,omitempty"`
+	UpdatedAt     time.Time           `json:"updated_at,omitempty"`
+	SoftDeleted   bool                `json:"soft_deleted,omitempty"`
 }
 
-type NewAccountRequestLocationJSON struct {
+type LocationDetailsJSON struct {
+	Id           int64  `json:"id,omitempty"`
+	IdAccount    int64  `json:"id_account,omitempty"`
 	CEP          string `json:"cep,omitempty"`
 	Country      string `json:"country,omitempty"`
 	State        string `json:"state,omitempty"`
@@ -29,15 +34,18 @@ type NewAccountRequestLocationJSON struct {
 	Complement   string `json:"complement,omitempty"`
 }
 
-func NewAccountRequestFromProtoToJSON(protoMessage *pb.NewAccountRequest) *NewAccountRequestJSON {
-	return &NewAccountRequestJSON{
+func NewAccountDetailsFromProtoToJSON(protoMessage *pb.AccountDetails) *AccountDetailsRequestJSON {
+	return &AccountDetailsRequestJSON{
+		Id:            protoMessage.GetId(),
 		FullName:      protoMessage.GetFullName(),
 		Email:         protoMessage.GetEmail(),
 		Cpf:           protoMessage.GetCpf(),
 		BirthDate:     common.TimestampToTime(protoMessage.GetBirthDate()),
 		Password:      protoMessage.GetPasswd(),
 		TwoFactorCode: protoMessage.GetTwoFactorCode(),
-		Location: NewAccountRequestLocationJSON{
+		Location: LocationDetailsJSON{
+			Id:           protoMessage.Location.GetId(),
+			IdAccount:    protoMessage.Location.GetIdAccount(),
 			CEP:          protoMessage.Location.GetCep(),
 			Country:      protoMessage.Location.GetCountry(),
 			State:        protoMessage.Location.GetState(),
@@ -47,18 +55,24 @@ func NewAccountRequestFromProtoToJSON(protoMessage *pb.NewAccountRequest) *NewAc
 			PlaceNumber:  protoMessage.Location.GetPlaceNumber(),
 			Complement:   protoMessage.Location.GetComplement(),
 		},
+		CreatedAt:   common.TimestampToTime(protoMessage.GetCreatedAt()),
+		UpdatedAt:   common.TimestampToTime(protoMessage.GetUpdatedAt()),
+		SoftDeleted: protoMessage.GetSoftDeleted(),
 	}
 }
 
-func NewAccountRequestFromJSONToProto(jsonMessage *NewAccountRequestJSON) *pb.NewAccountRequest {
-	return &pb.NewAccountRequest{
+func NewAccountDetailsFromJSONToProto(jsonMessage *AccountDetailsRequestJSON) *pb.AccountDetails {
+	return &pb.AccountDetails{
+		Id:            jsonMessage.Id,
 		FullName:      jsonMessage.FullName,
 		Email:         jsonMessage.Email,
 		Cpf:           jsonMessage.Cpf,
-		BirthDate:     timestamppb.Now(), // TODO: Adicionar -> common.TimeToTimestamp(jsonMessage.BirthDate)
+		BirthDate:     common.TimeToTimestamp(jsonMessage.BirthDate),
 		Passwd:        jsonMessage.Password,
 		TwoFactorCode: jsonMessage.TwoFactorCode,
-		Location: &pb.NewAccountLocation{
+		Location: &pb.LocationDetails{
+			Id:           jsonMessage.Location.Id,
+			IdAccount:    jsonMessage.Location.IdAccount,
 			Cep:          jsonMessage.Location.CEP,
 			Country:      jsonMessage.Location.Country,
 			State:        jsonMessage.Location.State,
@@ -68,5 +82,8 @@ func NewAccountRequestFromJSONToProto(jsonMessage *NewAccountRequestJSON) *pb.Ne
 			PlaceNumber:  jsonMessage.Location.PlaceNumber,
 			Complement:   jsonMessage.Location.Complement,
 		},
+		CreatedAt:   common.TimeToTimestamp(jsonMessage.CreatedAt),
+		UpdatedAt:   common.TimeToTimestamp(jsonMessage.UpdatedAt),
+		SoftDeleted: jsonMessage.SoftDeleted,
 	}
 }
