@@ -1,0 +1,18 @@
+[POST]   /api/account/new
+[GET]    /api/account/by-id
+[PUT]    /api/account/edit
+[DELETE] /api/account/soft-delete
+
+[POST]   /api/auth/sign-in
+[POST]   /api/auth/sign-out
+[PUT]    /api/auth/recover
+
+[POST]   /api/occurrence/new
+[GET]    /api/occurrence/by-id
+[GET]    /api/occurrence/all
+[GET]    /api/occurrence/nearby
+[PUT]    /api/occurrence/edit
+[PUT]    /api/occurrence/accept
+[PUT]    /api/occurrence/cancel
+[PUT]    /api/occurrence/finish
+[DELETE] /api/occurrence/soft-delete

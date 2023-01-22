@@ -10,39 +10,37 @@ import (
 )
 
 var (
-	MockModeActivated = false
+	MockModeActivated bool = false
 )
 
 var (
-	ApiPort = 8080
-	Router  = &gin.Engine{}
+	ApiPort string      = "8080"
+	Router  *gin.Engine = &gin.Engine{}
 )
 
 var (
-	Database       = &sql.DB{}
-	DatabaseUser   = ""
-	DatabasePass   = ""
-	DatabaseHost   = ""
-	DatabaseName   = ""
-	DatabasePort   = ""
-	DatabaseSSL    = ""
-	DatabaseURL    = ""
-	DatabaseDriver = "postgres"
+	Database       *sql.DB = &sql.DB{}
+	DatabaseUser   string  = ""
+	DatabasePass   string  = ""
+	DatabaseHost   string  = ""
+	DatabaseName   string  = ""
+	DatabasePort   string  = ""
+	DatabaseSSL    string  = ""
+	DatabaseURL    string  = ""
+	DatabaseDriver string  = "postgres"
 )
 
 var (
-	RabbitURL  = ""
-	RabbitPort = ""
-
-	RabbitConn    = &amqp.Connection{}
-	RabbitChannel = &amqp.Channel{}
-
-	RabbitQueueName = "cbmbr_queue"
-	RabbitQueue     = &amqp.Queue{}
+	RabbitURL       string           = ""
+	RabbitPort      string           = ""
+	RabbitQueueName string           = "cbmbr_queue"
+	RabbitConn      *amqp.Connection = &amqp.Connection{}
+	RabbitChannel   *amqp.Channel    = &amqp.Channel{}
+	RabbitQueue     *amqp.Queue      = &amqp.Queue{}
 )
 
 var (
-	GrpcServer           = &grpc.Server{}
-	GrpcConn             = &grpc.ClientConn{}
-	AccountServiceClient = pb.NewAccountServiceClient(GrpcConn)
+	GrpcServer           *grpc.Server     = &grpc.Server{}
+	GrpcConn             *grpc.ClientConn = &grpc.ClientConn{}
+	AccountServiceClient                  = pb.NewAccountServiceClient(GrpcConn)
 )

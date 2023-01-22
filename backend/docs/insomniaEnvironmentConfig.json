@@ -1,0 +1,6 @@
+{
+	"BASE_URL": "http://localhost:8080/api",
+	"ACCOUNT_BASE_URL": "http://localhost:8080/api/account",
+	"OCCURRENCE_BASE_URL": "http://localhost:8080/api/occurrence",
+	"AUTH_BASE_URL": "http://localhost:8080/api/auth"
+}

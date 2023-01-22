@@ -1,5 +1,6 @@
 CREATE TABLE account_location_tb(
     id SERIAL PRIMARY KEY,
+    id_account INT REFERENCES account_tb(id),
     cep VARCHAR(8) NOT NULL,
     country VARCHAR(255) NOT NULL,
     state VARCHAR(255) NOT NULL,
@@ -12,7 +13,6 @@ CREATE TABLE account_location_tb(
 
 CREATE TABLE account_tb(
     id SERIAL PRIMARY KEY,
-    id_main_location INT REFERENCES account_location_tb(id),
     full_name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
     cpf VARCHAR(11) NOT NULL,

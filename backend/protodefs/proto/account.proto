@@ -2,14 +2,30 @@ syntax = "proto3";
 package proto;
 option go_package = "./proto";
 
+import "common.proto";
+import "google/protobuf/timestamp.proto";
+
 service AccountService {
     rpc Create(NewAccountRequest) returns (JwtToken);
 }
 
-message JwtToken {
-    string token = 1;
+message NewAccountLocation {
+    string cep = 1;
+    string country = 2;
+    string state = 3;
+    string city = 4;
+    string neighborhood = 5;
+    string street = 6;
+    int64 place_number = 7;
+    string complement = 8;
 }
 
 message NewAccountRequest {
-    int64 id = 1;
+    string full_name = 1;
+    string email = 2;
+    string cpf = 3;
+    google.protobuf.Timestamp birth_date = 4;
+    string passwd = 5;
+    string two_factor_code = 6;
+    NewAccountLocation location = 7;
 }
