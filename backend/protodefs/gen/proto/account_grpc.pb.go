@@ -19,6 +19,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AccountServiceClient interface {
 	Create(ctx context.Context, in *NewAccountRequest, opts ...grpc.CallOption) (*AccountDetails, error)
+	GetById(ctx context.Context, in *GetAccountByIdRequest, opts ...grpc.CallOption) (*AccountDetails, error)
 }
 
 type accountServiceClient struct {
@@ -38,11 +39,21 @@ func (c *accountServiceClient) Create(ctx context.Context, in *NewAccountRequest
 	return out, nil
 }
 
+func (c *accountServiceClient) GetById(ctx context.Context, in *GetAccountByIdRequest, opts ...grpc.CallOption) (*AccountDetails, error) {
+	out := new(AccountDetails)
+	err := c.cc.Invoke(ctx, "/proto.AccountService/GetById", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AccountServiceServer is the server API for AccountService service.
 // All implementations must embed UnimplementedAccountServiceServer
 // for forward compatibility
 type AccountServiceServer interface {
 	Create(context.Context, *NewAccountRequest) (*AccountDetails, error)
+	GetById(context.Context, *GetAccountByIdRequest) (*AccountDetails, error)
 	mustEmbedUnimplementedAccountServiceServer()
 }
 
@@ -52,6 +63,9 @@ type UnimplementedAccountServiceServer struct {
 
 func (UnimplementedAccountServiceServer) Create(context.Context, *NewAccountRequest) (*AccountDetails, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
+}
+func (UnimplementedAccountServiceServer) GetById(context.Context, *GetAccountByIdRequest) (*AccountDetails, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetById not implemented")
 }
 func (UnimplementedAccountServiceServer) mustEmbedUnimplementedAccountServiceServer() {}
 
@@ -84,6 +98,24 @@ func _AccountService_Create_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AccountService_GetById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAccountByIdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AccountServiceServer).GetById(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto.AccountService/GetById",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AccountServiceServer).GetById(ctx, req.(*GetAccountByIdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AccountService_ServiceDesc is the grpc.ServiceDesc for AccountService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -94,6 +126,10 @@ var AccountService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Create",
 			Handler:    _AccountService_Create_Handler,
+		},
+		{
+			MethodName: "GetById",
+			Handler:    _AccountService_GetById_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

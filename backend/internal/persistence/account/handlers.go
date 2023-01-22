@@ -2,6 +2,7 @@ package persistence
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/carlosabdoamaral/cbm_brasil/backend/common"
 	"github.com/carlosabdoamaral/cbm_brasil/backend/internal/responses"
@@ -40,7 +41,7 @@ func CreateAccount(ctx *context.Context, req *pb.NewAccountRequest) (*pb.Account
 }
 
 func GetAccountDetailsById(ctx *context.Context, id int64) (*pb.AccountDetails, error) {
-	query := `
+	query := fmt.Sprintf(`
 	SELECT
 		account_tb.id,
 		account_tb.full_name,
@@ -64,17 +65,17 @@ func GetAccountDetailsById(ctx *context.Context, id int64) (*pb.AccountDetails, 
 		account_tb.soft_deleted
 	FROM account_tb
 	INNER JOIN account_location_tb on account_tb.id = account_location_tb.id_account
-	WHERE account_tb.id = ?
-	`
+	WHERE account_tb.id = %d
+	`, id)
 
 	db := common.Database
-	rows, err := db.Query(query, id)
+	rows, err := db.Query(query)
 	if err != nil {
 		common.LogError(err.Error())
 		return nil, err
 	}
 
-	res := &pb.AccountDetails{}
+	res := &responses.AccountDetailsJSON{}
 	for rows.Next() {
 		err := rows.Scan(
 			&res.Id,
@@ -82,11 +83,11 @@ func GetAccountDetailsById(ctx *context.Context, id int64) (*pb.AccountDetails, 
 			&res.Email,
 			&res.Cpf,
 			&res.BirthDate,
-			&res.Passwd,
+			&res.Password,
 			&res.TwoFactorCode,
 			&res.Location.Id,
 			&res.Location.IdAccount,
-			&res.Location.Cep,
+			&res.Location.CEP,
 			&res.Location.Country,
 			&res.Location.State,
 			&res.Location.City,
@@ -105,7 +106,7 @@ func GetAccountDetailsById(ctx *context.Context, id int64) (*pb.AccountDetails, 
 		}
 	}
 
-	return res, nil
+	return responses.NewAccountDetailsFromJSONToProto(res), nil
 }
 
 func GetLastAccountDetails(ctx *context.Context) (*pb.AccountDetails, error) {
@@ -143,7 +144,7 @@ func GetLastAccountDetails(ctx *context.Context) (*pb.AccountDetails, error) {
 		return nil, err
 	}
 
-	res := &responses.AccountDetailsRequestJSON{}
+	res := &responses.AccountDetailsJSON{}
 	for rows.Next() {
 		err := rows.Scan(
 			&res.Id,

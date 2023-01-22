@@ -7,7 +7,7 @@ import (
 	pb "github.com/carlosabdoamaral/cbm_brasil/backend/protodefs/gen/proto"
 )
 
-type AccountDetailsRequestJSON struct {
+type AccountDetailsJSON struct {
 	Id            int64               `json:"id,omitempty"`
 	FullName      string              `json:"full_name,omitempty"`
 	Email         string              `json:"email,omitempty"`
@@ -34,8 +34,8 @@ type LocationDetailsJSON struct {
 	Complement   string `json:"complement,omitempty"`
 }
 
-func NewAccountDetailsFromProtoToJSON(protoMessage *pb.AccountDetails) *AccountDetailsRequestJSON {
-	return &AccountDetailsRequestJSON{
+func NewAccountDetailsFromProtoToJSON(protoMessage *pb.AccountDetails) *AccountDetailsJSON {
+	return &AccountDetailsJSON{
 		Id:            protoMessage.GetId(),
 		FullName:      protoMessage.GetFullName(),
 		Email:         protoMessage.GetEmail(),
@@ -61,7 +61,7 @@ func NewAccountDetailsFromProtoToJSON(protoMessage *pb.AccountDetails) *AccountD
 	}
 }
 
-func NewAccountDetailsFromJSONToProto(jsonMessage *AccountDetailsRequestJSON) *pb.AccountDetails {
+func NewAccountDetailsFromJSONToProto(jsonMessage *AccountDetailsJSON) *pb.AccountDetails {
 	return &pb.AccountDetails{
 		Id:            jsonMessage.Id,
 		FullName:      jsonMessage.FullName,

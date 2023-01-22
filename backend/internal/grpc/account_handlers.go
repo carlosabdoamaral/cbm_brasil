@@ -15,3 +15,12 @@ func (s *AccountServer) Create(ctx context.Context, req *pb.NewAccountRequest) (
 
 	return res, nil
 }
+
+func (s *AccountServer) GetById(ctx context.Context, req *pb.GetAccountByIdRequest) (*pb.AccountDetails, error) {
+	res, err := persistence.GetAccountDetailsById(&ctx, req.GetId())
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
