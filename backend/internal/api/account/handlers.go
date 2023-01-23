@@ -17,21 +17,21 @@ func HandleNewAccountRequest(ctx *gin.Context) {
 		ctx.IndentedJSON(http.StatusBadRequest, err.Error())
 	}
 
-	jsonModel := responses.NewAccountRequestJSON{}
+	jsonModel := responses.CreateAccount{}
 	err = json.Unmarshal(body, &jsonModel)
 	if err != nil {
 		common.LogError(err.Error())
 		return
 	}
 
-	protoMessage := responses.NewAccountRequestFromJSONToProto(&jsonModel)
+	protoMessage := responses.NewCreateAccountModelFromJSONToProto(&jsonModel)
 	res, err := common.AccountServiceClient.Create(ctx.Request.Context(), protoMessage)
 	if err != nil {
 		common.LogError(err.Error())
 		ctx.IndentedJSON(http.StatusInternalServerError, err.Error())
 	}
 
-	ctx.IndentedJSON(http.StatusOK, responses.NewAccountDetailsFromProtoToJSON(res))
+	ctx.IndentedJSON(http.StatusOK, responses.NewAccountDetailsModelFromProtoToJSON(res))
 }
 
 func HandleFetchAccountByIdRequest(ctx *gin.Context) {
@@ -41,7 +41,7 @@ func HandleFetchAccountByIdRequest(ctx *gin.Context) {
 		ctx.IndentedJSON(http.StatusInternalServerError, err.Error())
 	}
 
-	jsonModel := responses.AccountDetailsByIDRequestJSON{}
+	jsonModel := responses.Id{}
 	err = json.Unmarshal(body, &jsonModel)
 	if err != nil {
 		common.LogError(err.Error())
@@ -49,7 +49,7 @@ func HandleFetchAccountByIdRequest(ctx *gin.Context) {
 		return
 	}
 
-	protoMessage := responses.NewAccountDetailsByIDRequestFromJSONToProto(&jsonModel)
+	protoMessage := responses.NewIdModelFromJSONToProto(&jsonModel)
 	res, err := common.AccountServiceClient.GetById(ctx.Request.Context(), protoMessage)
 	if err != nil {
 		common.LogError(err.Error())
@@ -57,7 +57,7 @@ func HandleFetchAccountByIdRequest(ctx *gin.Context) {
 		return
 	}
 
-	ctx.IndentedJSON(http.StatusOK, responses.NewAccountDetailsFromProtoToJSON(res))
+	ctx.IndentedJSON(http.StatusOK, responses.NewAccountDetailsModelFromProtoToJSON(res))
 }
 
 func HandleEditAccountRequest(ctx *gin.Context) {
@@ -67,7 +67,7 @@ func HandleEditAccountRequest(ctx *gin.Context) {
 		ctx.IndentedJSON(http.StatusInternalServerError, err.Error())
 	}
 
-	jsonModel := responses.EditAccountJSON{}
+	jsonModel := responses.EditAccount{}
 	err = json.Unmarshal(body, &jsonModel)
 	if err != nil {
 		common.LogError(err.Error())
@@ -75,7 +75,7 @@ func HandleEditAccountRequest(ctx *gin.Context) {
 		return
 	}
 
-	protoMessage := responses.NewEditAccountBodyFromJSONToProto(&jsonModel)
+	protoMessage := responses.NewEditAccountModelFromJSONToProto(&jsonModel)
 	res, err := common.AccountServiceClient.EditById(ctx.Request.Context(), protoMessage)
 	if err != nil {
 		common.LogError(err.Error())
@@ -83,7 +83,7 @@ func HandleEditAccountRequest(ctx *gin.Context) {
 		return
 	}
 
-	ctx.IndentedJSON(http.StatusOK, responses.NewAccountDetailsFromProtoToJSON(res))
+	ctx.IndentedJSON(http.StatusOK, responses.NewAccountDetailsModelFromProtoToJSON(res))
 }
 
 func HandleSoftDeleteAccountRequest(ctx *gin.Context) {
@@ -93,7 +93,7 @@ func HandleSoftDeleteAccountRequest(ctx *gin.Context) {
 		ctx.IndentedJSON(http.StatusInternalServerError, err.Error())
 	}
 
-	jsonModel := responses.AccountSoftDeleteRequestJSON{}
+	jsonModel := responses.Id{}
 	err = json.Unmarshal(body, &jsonModel)
 	if err != nil {
 		common.LogError(err.Error())
@@ -101,7 +101,7 @@ func HandleSoftDeleteAccountRequest(ctx *gin.Context) {
 		return
 	}
 
-	protoMessage := responses.NewAccountSoftDeleteRequestFromJSONToProto(&jsonModel)
+	protoMessage := responses.NewIdModelFromJSONToProto(&jsonModel)
 	res, err := common.AccountServiceClient.SoftDeleteById(ctx.Request.Context(), protoMessage)
 	if err != nil {
 		common.LogError(err.Error())
@@ -109,7 +109,7 @@ func HandleSoftDeleteAccountRequest(ctx *gin.Context) {
 		return
 	}
 
-	ctx.IndentedJSON(http.StatusOK, responses.NewStatusResponseFromProtoToJSON(res))
+	ctx.IndentedJSON(http.StatusOK, responses.NewStatusResponseModelFromProtoToJSON(res))
 }
 
 func HandleRecoverRequest(ctx *gin.Context) {
@@ -119,7 +119,7 @@ func HandleRecoverRequest(ctx *gin.Context) {
 		ctx.IndentedJSON(http.StatusInternalServerError, err.Error())
 	}
 
-	jsonModel := responses.AccountSoftDeleteRequestJSON{}
+	jsonModel := responses.Id{}
 	err = json.Unmarshal(body, &jsonModel)
 	if err != nil {
 		common.LogError(err.Error())
@@ -127,7 +127,7 @@ func HandleRecoverRequest(ctx *gin.Context) {
 		return
 	}
 
-	protoMessage := responses.NewAccountSoftDeleteRequestFromJSONToProto(&jsonModel)
+	protoMessage := responses.NewIdModelFromJSONToProto(&jsonModel)
 	res, err := common.AccountServiceClient.RecoverAccountById(ctx.Request.Context(), protoMessage)
 	if err != nil {
 		common.LogError(err.Error())
@@ -135,5 +135,5 @@ func HandleRecoverRequest(ctx *gin.Context) {
 		return
 	}
 
-	ctx.IndentedJSON(http.StatusOK, responses.NewStatusResponseFromProtoToJSON(res))
+	ctx.IndentedJSON(http.StatusOK, responses.NewStatusResponseModelFromProtoToJSON(res))
 }

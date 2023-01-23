@@ -5,11 +5,12 @@ import (
 	"fmt"
 
 	"github.com/carlosabdoamaral/cbm_brasil/backend/common"
+	"github.com/carlosabdoamaral/cbm_brasil/backend/internal/persistence"
 	"github.com/carlosabdoamaral/cbm_brasil/backend/internal/responses"
 	pb "github.com/carlosabdoamaral/cbm_brasil/backend/protodefs/gen/proto"
 )
 
-func CreateAccount(ctx *context.Context, req *pb.NewAccountRequest) (*pb.AccountDetails, error) {
+func CreateAccount(ctx *context.Context, req *pb.CreateAccount) (*pb.AccountDetails, error) {
 	query := `
 	DO $$
 		DECLARE lastid integer;
@@ -75,38 +76,14 @@ func GetAccountDetailsById(ctx *context.Context, id int64) (*pb.AccountDetails, 
 		return nil, err
 	}
 
-	res := &responses.AccountDetailsJSON{}
-	for rows.Next() {
-		err := rows.Scan(
-			&res.Id,
-			&res.FullName,
-			&res.Email,
-			&res.Cpf,
-			&res.BirthDate,
-			&res.Password,
-			&res.TwoFactorCode,
-			&res.Location.Id,
-			&res.Location.IdAccount,
-			&res.Location.CEP,
-			&res.Location.Country,
-			&res.Location.State,
-			&res.Location.City,
-			&res.Location.Neighborhood,
-			&res.Location.Street,
-			&res.Location.PlaceNumber,
-			&res.Location.Complement,
-			&res.CreatedAt,
-			&res.UpdatedAt,
-			&res.SoftDeleted,
-		)
-
-		if err != nil {
-			common.LogError(err.Error())
-			return nil, err
-		}
+	res := &responses.AccountDetails{}
+	err = persistence.ScanAccountDetails(rows, res)
+	if err != nil {
+		common.LogError(err.Error())
+		return nil, err
 	}
 
-	return responses.NewAccountDetailsFromJSONToProto(res), nil
+	return responses.NewAccountDetailsModelFromJSONToProto(res), nil
 }
 
 func GetLastAccountDetails(ctx *context.Context) (*pb.AccountDetails, error) {
@@ -144,41 +121,17 @@ func GetLastAccountDetails(ctx *context.Context) (*pb.AccountDetails, error) {
 		return nil, err
 	}
 
-	res := &responses.AccountDetailsJSON{}
-	for rows.Next() {
-		err := rows.Scan(
-			&res.Id,
-			&res.FullName,
-			&res.Email,
-			&res.Cpf,
-			&res.BirthDate,
-			&res.Password,
-			&res.TwoFactorCode,
-			&res.Location.Id,
-			&res.Location.IdAccount,
-			&res.Location.CEP,
-			&res.Location.Country,
-			&res.Location.State,
-			&res.Location.City,
-			&res.Location.Neighborhood,
-			&res.Location.Street,
-			&res.Location.PlaceNumber,
-			&res.Location.Complement,
-			&res.CreatedAt,
-			&res.UpdatedAt,
-			&res.SoftDeleted,
-		)
-
-		if err != nil {
-			common.LogError(err.Error())
-			return nil, err
-		}
+	res := &responses.AccountDetails{}
+	err = persistence.ScanAccountDetails(rows, res)
+	if err != nil {
+		common.LogError(err.Error())
+		return nil, err
 	}
 
-	return responses.NewAccountDetailsFromJSONToProto(res), nil
+	return responses.NewAccountDetailsModelFromJSONToProto(res), nil
 }
 
-func EditAccountById(ctx *context.Context, req *pb.EditAccountByIdRequest) (*pb.AccountDetails, error) {
+func EditAccountById(ctx *context.Context, req *pb.EditAccount) (*pb.AccountDetails, error) {
 	updateAccountTbQuery := `
 	UPDATE account_tb
 	SET
@@ -206,7 +159,7 @@ func EditAccountById(ctx *context.Context, req *pb.EditAccountByIdRequest) (*pb.
 	`
 
 	db := common.Database
-	reqAsJSON := responses.NewEditAccountBodyFromProtoToJSON(req)
+	reqAsJSON := responses.NewEditAccountModelFromProtoToJSON(req)
 	_, err := db.Exec(
 		updateAccountTbQuery,
 		reqAsJSON.FullName,
@@ -247,7 +200,7 @@ func EditAccountById(ctx *context.Context, req *pb.EditAccountByIdRequest) (*pb.
 	return accountDetails, nil
 }
 
-func UpdateSoftDeleteStateById(ctx *context.Context, newState bool, req *pb.AccountSoftDeleteByIdRequest) (*pb.StatusResponse, error) {
+func UpdateSoftDeleteStateById(ctx *context.Context, newState bool, req *pb.Id) (*pb.StatusResponse, error) {
 	query := `UPDATE account_tb SET soft_deleted = $1 WHERE id = $2`
 
 	db := common.Database

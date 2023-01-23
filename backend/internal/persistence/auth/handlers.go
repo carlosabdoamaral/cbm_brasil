@@ -49,13 +49,13 @@ func SignInByEmail(ctx *context.Context, req *pb.SignInByEmailRequest) (*pb.Acco
 		return nil, err
 	}
 
-	res := &responses.AccountDetailsJSON{}
+	res := &responses.AccountDetails{}
 	err = persistence.ScanAccountDetails(rows, res)
 	if err != nil {
 		return nil, err
 	}
 
-	return responses.NewAccountDetailsFromJSONToProto(res), nil
+	return responses.NewAccountDetailsModelFromJSONToProto(res), nil
 }
 
 func SignInByCPF(ctx *context.Context, req *pb.SignInByCPFRequest) (*pb.AccountDetails, error) {
@@ -96,11 +96,11 @@ func SignInByCPF(ctx *context.Context, req *pb.SignInByCPFRequest) (*pb.AccountD
 		return nil, err
 	}
 
-	res := &responses.AccountDetailsJSON{}
+	res := &responses.AccountDetails{}
 	err = persistence.ScanAccountDetails(rows, res)
 	if err != nil {
 		return nil, err
 	}
 
-	return responses.NewAccountDetailsFromJSONToProto(res), nil
+	return responses.NewAccountDetailsModelFromJSONToProto(res), nil
 }

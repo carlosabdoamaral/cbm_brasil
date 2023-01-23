@@ -17,14 +17,14 @@ func HandleSignInRequestByCPF(ctx *gin.Context) {
 		return
 	}
 
-	jsonModel := responses.SignInByCPFRequest{}
+	jsonModel := responses.SignInByCPF{}
 	err = json.Unmarshal(body, &jsonModel)
 	if err != nil {
 		ctx.IndentedJSON(http.StatusConflict, err.Error())
 		return
 	}
 
-	protoMessage := responses.NewSignInByCPFRequestFromJSONToProto(&jsonModel)
+	protoMessage := responses.NewSignInByCPFModelFromJSONToProto(&jsonModel)
 	res, err := common.AuthServiceClient.SignInByCPF(ctx.Request.Context(), protoMessage)
 	if err != nil {
 		ctx.IndentedJSON(http.StatusInternalServerError, err.Error())
@@ -36,7 +36,7 @@ func HandleSignInRequestByCPF(ctx *gin.Context) {
 		return
 	}
 
-	ctx.IndentedJSON(http.StatusOK, responses.NewAccountDetailsFromProtoToJSON(res))
+	ctx.IndentedJSON(http.StatusOK, responses.NewAccountDetailsModelFromProtoToJSON(res))
 }
 
 func HandleSignInRequestByEmail(ctx *gin.Context) {
@@ -46,14 +46,14 @@ func HandleSignInRequestByEmail(ctx *gin.Context) {
 		return
 	}
 
-	jsonModel := responses.SignInByEmailRequest{}
+	jsonModel := responses.SignInByEmail{}
 	err = json.Unmarshal(body, &jsonModel)
 	if err != nil {
 		ctx.IndentedJSON(http.StatusConflict, err.Error())
 		return
 	}
 
-	protoMessage := responses.NewSignInByEmailRequestFromJSONToProto(&jsonModel)
+	protoMessage := responses.NewSignInByEmailModelFromJSONToProto(&jsonModel)
 	res, err := common.AuthServiceClient.SignInByEmail(ctx.Request.Context(), protoMessage)
 	if err != nil {
 		ctx.IndentedJSON(http.StatusInternalServerError, err.Error())
@@ -65,5 +65,5 @@ func HandleSignInRequestByEmail(ctx *gin.Context) {
 		return
 	}
 
-	ctx.IndentedJSON(http.StatusOK, responses.NewAccountDetailsFromProtoToJSON(res))
+	ctx.IndentedJSON(http.StatusOK, responses.NewAccountDetailsModelFromProtoToJSON(res))
 }

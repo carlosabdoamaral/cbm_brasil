@@ -7,7 +7,7 @@ import (
 	"github.com/carlosabdoamaral/cbm_brasil/backend/internal/responses"
 )
 
-func ScanAccountDetails(rows *sql.Rows, res *responses.AccountDetailsJSON) error {
+func ScanAccountDetails(rows *sql.Rows, res *responses.AccountDetails) error {
 	for rows.Next() {
 		err := rows.Scan(
 			&res.Id,

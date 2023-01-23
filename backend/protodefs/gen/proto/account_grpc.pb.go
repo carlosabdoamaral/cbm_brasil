@@ -18,11 +18,11 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AccountServiceClient interface {
-	Create(ctx context.Context, in *NewAccountRequest, opts ...grpc.CallOption) (*AccountDetails, error)
-	GetById(ctx context.Context, in *GetAccountByIdRequest, opts ...grpc.CallOption) (*AccountDetails, error)
-	EditById(ctx context.Context, in *EditAccountByIdRequest, opts ...grpc.CallOption) (*AccountDetails, error)
-	SoftDeleteById(ctx context.Context, in *AccountSoftDeleteByIdRequest, opts ...grpc.CallOption) (*StatusResponse, error)
-	RecoverAccountById(ctx context.Context, in *AccountSoftDeleteByIdRequest, opts ...grpc.CallOption) (*StatusResponse, error)
+	Create(ctx context.Context, in *CreateAccount, opts ...grpc.CallOption) (*AccountDetails, error)
+	GetById(ctx context.Context, in *Id, opts ...grpc.CallOption) (*AccountDetails, error)
+	EditById(ctx context.Context, in *EditAccount, opts ...grpc.CallOption) (*AccountDetails, error)
+	SoftDeleteById(ctx context.Context, in *Id, opts ...grpc.CallOption) (*StatusResponse, error)
+	RecoverAccountById(ctx context.Context, in *Id, opts ...grpc.CallOption) (*StatusResponse, error)
 }
 
 type accountServiceClient struct {
@@ -33,7 +33,7 @@ func NewAccountServiceClient(cc grpc.ClientConnInterface) AccountServiceClient {
 	return &accountServiceClient{cc}
 }
 
-func (c *accountServiceClient) Create(ctx context.Context, in *NewAccountRequest, opts ...grpc.CallOption) (*AccountDetails, error) {
+func (c *accountServiceClient) Create(ctx context.Context, in *CreateAccount, opts ...grpc.CallOption) (*AccountDetails, error) {
 	out := new(AccountDetails)
 	err := c.cc.Invoke(ctx, "/proto.AccountService/Create", in, out, opts...)
 	if err != nil {
@@ -42,7 +42,7 @@ func (c *accountServiceClient) Create(ctx context.Context, in *NewAccountRequest
 	return out, nil
 }
 
-func (c *accountServiceClient) GetById(ctx context.Context, in *GetAccountByIdRequest, opts ...grpc.CallOption) (*AccountDetails, error) {
+func (c *accountServiceClient) GetById(ctx context.Context, in *Id, opts ...grpc.CallOption) (*AccountDetails, error) {
 	out := new(AccountDetails)
 	err := c.cc.Invoke(ctx, "/proto.AccountService/GetById", in, out, opts...)
 	if err != nil {
@@ -51,7 +51,7 @@ func (c *accountServiceClient) GetById(ctx context.Context, in *GetAccountByIdRe
 	return out, nil
 }
 
-func (c *accountServiceClient) EditById(ctx context.Context, in *EditAccountByIdRequest, opts ...grpc.CallOption) (*AccountDetails, error) {
+func (c *accountServiceClient) EditById(ctx context.Context, in *EditAccount, opts ...grpc.CallOption) (*AccountDetails, error) {
 	out := new(AccountDetails)
 	err := c.cc.Invoke(ctx, "/proto.AccountService/EditById", in, out, opts...)
 	if err != nil {
@@ -60,7 +60,7 @@ func (c *accountServiceClient) EditById(ctx context.Context, in *EditAccountById
 	return out, nil
 }
 
-func (c *accountServiceClient) SoftDeleteById(ctx context.Context, in *AccountSoftDeleteByIdRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
+func (c *accountServiceClient) SoftDeleteById(ctx context.Context, in *Id, opts ...grpc.CallOption) (*StatusResponse, error) {
 	out := new(StatusResponse)
 	err := c.cc.Invoke(ctx, "/proto.AccountService/SoftDeleteById", in, out, opts...)
 	if err != nil {
@@ -69,7 +69,7 @@ func (c *accountServiceClient) SoftDeleteById(ctx context.Context, in *AccountSo
 	return out, nil
 }
 
-func (c *accountServiceClient) RecoverAccountById(ctx context.Context, in *AccountSoftDeleteByIdRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
+func (c *accountServiceClient) RecoverAccountById(ctx context.Context, in *Id, opts ...grpc.CallOption) (*StatusResponse, error) {
 	out := new(StatusResponse)
 	err := c.cc.Invoke(ctx, "/proto.AccountService/RecoverAccountById", in, out, opts...)
 	if err != nil {
@@ -82,11 +82,11 @@ func (c *accountServiceClient) RecoverAccountById(ctx context.Context, in *Accou
 // All implementations must embed UnimplementedAccountServiceServer
 // for forward compatibility
 type AccountServiceServer interface {
-	Create(context.Context, *NewAccountRequest) (*AccountDetails, error)
-	GetById(context.Context, *GetAccountByIdRequest) (*AccountDetails, error)
-	EditById(context.Context, *EditAccountByIdRequest) (*AccountDetails, error)
-	SoftDeleteById(context.Context, *AccountSoftDeleteByIdRequest) (*StatusResponse, error)
-	RecoverAccountById(context.Context, *AccountSoftDeleteByIdRequest) (*StatusResponse, error)
+	Create(context.Context, *CreateAccount) (*AccountDetails, error)
+	GetById(context.Context, *Id) (*AccountDetails, error)
+	EditById(context.Context, *EditAccount) (*AccountDetails, error)
+	SoftDeleteById(context.Context, *Id) (*StatusResponse, error)
+	RecoverAccountById(context.Context, *Id) (*StatusResponse, error)
 	mustEmbedUnimplementedAccountServiceServer()
 }
 
@@ -94,19 +94,19 @@ type AccountServiceServer interface {
 type UnimplementedAccountServiceServer struct {
 }
 
-func (UnimplementedAccountServiceServer) Create(context.Context, *NewAccountRequest) (*AccountDetails, error) {
+func (UnimplementedAccountServiceServer) Create(context.Context, *CreateAccount) (*AccountDetails, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
 }
-func (UnimplementedAccountServiceServer) GetById(context.Context, *GetAccountByIdRequest) (*AccountDetails, error) {
+func (UnimplementedAccountServiceServer) GetById(context.Context, *Id) (*AccountDetails, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetById not implemented")
 }
-func (UnimplementedAccountServiceServer) EditById(context.Context, *EditAccountByIdRequest) (*AccountDetails, error) {
+func (UnimplementedAccountServiceServer) EditById(context.Context, *EditAccount) (*AccountDetails, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method EditById not implemented")
 }
-func (UnimplementedAccountServiceServer) SoftDeleteById(context.Context, *AccountSoftDeleteByIdRequest) (*StatusResponse, error) {
+func (UnimplementedAccountServiceServer) SoftDeleteById(context.Context, *Id) (*StatusResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SoftDeleteById not implemented")
 }
-func (UnimplementedAccountServiceServer) RecoverAccountById(context.Context, *AccountSoftDeleteByIdRequest) (*StatusResponse, error) {
+func (UnimplementedAccountServiceServer) RecoverAccountById(context.Context, *Id) (*StatusResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RecoverAccountById not implemented")
 }
 func (UnimplementedAccountServiceServer) mustEmbedUnimplementedAccountServiceServer() {}
@@ -123,7 +123,7 @@ func RegisterAccountServiceServer(s grpc.ServiceRegistrar, srv AccountServiceSer
 }
 
 func _AccountService_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(NewAccountRequest)
+	in := new(CreateAccount)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -135,13 +135,13 @@ func _AccountService_Create_Handler(srv interface{}, ctx context.Context, dec fu
 		FullMethod: "/proto.AccountService/Create",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AccountServiceServer).Create(ctx, req.(*NewAccountRequest))
+		return srv.(AccountServiceServer).Create(ctx, req.(*CreateAccount))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _AccountService_GetById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetAccountByIdRequest)
+	in := new(Id)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -153,13 +153,13 @@ func _AccountService_GetById_Handler(srv interface{}, ctx context.Context, dec f
 		FullMethod: "/proto.AccountService/GetById",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AccountServiceServer).GetById(ctx, req.(*GetAccountByIdRequest))
+		return srv.(AccountServiceServer).GetById(ctx, req.(*Id))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _AccountService_EditById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(EditAccountByIdRequest)
+	in := new(EditAccount)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -171,13 +171,13 @@ func _AccountService_EditById_Handler(srv interface{}, ctx context.Context, dec 
 		FullMethod: "/proto.AccountService/EditById",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AccountServiceServer).EditById(ctx, req.(*EditAccountByIdRequest))
+		return srv.(AccountServiceServer).EditById(ctx, req.(*EditAccount))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _AccountService_SoftDeleteById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AccountSoftDeleteByIdRequest)
+	in := new(Id)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -189,13 +189,13 @@ func _AccountService_SoftDeleteById_Handler(srv interface{}, ctx context.Context
 		FullMethod: "/proto.AccountService/SoftDeleteById",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AccountServiceServer).SoftDeleteById(ctx, req.(*AccountSoftDeleteByIdRequest))
+		return srv.(AccountServiceServer).SoftDeleteById(ctx, req.(*Id))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _AccountService_RecoverAccountById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AccountSoftDeleteByIdRequest)
+	in := new(Id)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -207,7 +207,7 @@ func _AccountService_RecoverAccountById_Handler(srv interface{}, ctx context.Con
 		FullMethod: "/proto.AccountService/RecoverAccountById",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AccountServiceServer).RecoverAccountById(ctx, req.(*AccountSoftDeleteByIdRequest))
+		return srv.(AccountServiceServer).RecoverAccountById(ctx, req.(*Id))
 	}
 	return interceptor(ctx, in, info, handler)
 }

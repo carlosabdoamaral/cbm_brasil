@@ -7,7 +7,7 @@ import (
 	pb "github.com/carlosabdoamaral/cbm_brasil/backend/protodefs/gen/proto"
 )
 
-func (s *AccountServer) Create(ctx context.Context, req *pb.NewAccountRequest) (*pb.AccountDetails, error) {
+func (s *AccountServer) Create(ctx context.Context, req *pb.CreateAccount) (*pb.AccountDetails, error) {
 	res, err := persistence.CreateAccount(&ctx, req)
 	if err != nil {
 		return nil, err
@@ -16,7 +16,7 @@ func (s *AccountServer) Create(ctx context.Context, req *pb.NewAccountRequest) (
 	return res, nil
 }
 
-func (s *AccountServer) GetById(ctx context.Context, req *pb.GetAccountByIdRequest) (*pb.AccountDetails, error) {
+func (s *AccountServer) GetById(ctx context.Context, req *pb.Id) (*pb.AccountDetails, error) {
 	res, err := persistence.GetAccountDetailsById(&ctx, req.GetId())
 	if err != nil {
 		return nil, err
@@ -25,7 +25,7 @@ func (s *AccountServer) GetById(ctx context.Context, req *pb.GetAccountByIdReque
 	return res, nil
 }
 
-func (s *AccountServer) EditById(ctx context.Context, req *pb.EditAccountByIdRequest) (*pb.AccountDetails, error) {
+func (s *AccountServer) EditById(ctx context.Context, req *pb.EditAccount) (*pb.AccountDetails, error) {
 	res, err := persistence.EditAccountById(&ctx, req)
 	if err != nil {
 		return nil, err
@@ -34,7 +34,7 @@ func (s *AccountServer) EditById(ctx context.Context, req *pb.EditAccountByIdReq
 	return res, nil
 }
 
-func (s *AccountServer) SoftDeleteById(ctx context.Context, req *pb.AccountSoftDeleteByIdRequest) (*pb.StatusResponse, error) {
+func (s *AccountServer) SoftDeleteById(ctx context.Context, req *pb.Id) (*pb.StatusResponse, error) {
 	res, err := persistence.UpdateSoftDeleteStateById(&ctx, true, req)
 	if err != nil {
 		return nil, err
@@ -43,7 +43,7 @@ func (s *AccountServer) SoftDeleteById(ctx context.Context, req *pb.AccountSoftD
 	return res, nil
 }
 
-func (s *AccountServer) RecoverAccountById(ctx context.Context, req *pb.AccountSoftDeleteByIdRequest) (*pb.StatusResponse, error) {
+func (s *AccountServer) RecoverAccountById(ctx context.Context, req *pb.Id) (*pb.StatusResponse, error) {
 	res, err := persistence.UpdateSoftDeleteStateById(&ctx, false, req)
 	if err != nil {
 		return nil, err
