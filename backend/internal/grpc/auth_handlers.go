@@ -18,3 +18,14 @@ func (s *AuthServer) SignInByEmail(ctx context.Context, req *pb.SignInByEmailReq
 
 	return accountDetails, nil
 }
+
+func (s *AuthServer) SignInByCPF(ctx context.Context, req *pb.SignInByCPFRequest) (*pb.AccountDetails, error) {
+	common.LogInfo("[GRPC] SignInByCPF")
+
+	accountDetails, err := persistence.SignInByCPF(&ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	return accountDetails, nil
+}

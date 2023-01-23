@@ -10,7 +10,34 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func HandleSignInRequestByCPF(ctx *gin.Context) {}
+func HandleSignInRequestByCPF(ctx *gin.Context) {
+	body, err := ioutil.ReadAll(ctx.Request.Body)
+	if err != nil {
+		ctx.IndentedJSON(http.StatusConflict, err.Error())
+		return
+	}
+
+	jsonModel := responses.SignInByCPFRequest{}
+	err = json.Unmarshal(body, &jsonModel)
+	if err != nil {
+		ctx.IndentedJSON(http.StatusConflict, err.Error())
+		return
+	}
+
+	protoMessage := responses.NewSignInByCPFRequestFromJSONToProto(&jsonModel)
+	res, err := common.AuthServiceClient.SignInByCPF(ctx.Request.Context(), protoMessage)
+	if err != nil {
+		ctx.IndentedJSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	if res.GetEmail() == "" {
+		ctx.IndentedJSON(http.StatusOK, "account not found with this credentials")
+		return
+	}
+
+	ctx.IndentedJSON(http.StatusOK, responses.NewAccountDetailsFromProtoToJSON(res))
+}
 
 func HandleSignInRequestByEmail(ctx *gin.Context) {
 	body, err := ioutil.ReadAll(ctx.Request.Body)

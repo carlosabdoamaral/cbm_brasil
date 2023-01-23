@@ -19,6 +19,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AuthServiceClient interface {
 	SignInByEmail(ctx context.Context, in *SignInByEmailRequest, opts ...grpc.CallOption) (*AccountDetails, error)
+	SignInByCPF(ctx context.Context, in *SignInByCPFRequest, opts ...grpc.CallOption) (*AccountDetails, error)
 }
 
 type authServiceClient struct {
@@ -38,11 +39,21 @@ func (c *authServiceClient) SignInByEmail(ctx context.Context, in *SignInByEmail
 	return out, nil
 }
 
+func (c *authServiceClient) SignInByCPF(ctx context.Context, in *SignInByCPFRequest, opts ...grpc.CallOption) (*AccountDetails, error) {
+	out := new(AccountDetails)
+	err := c.cc.Invoke(ctx, "/proto.AuthService/SignInByCPF", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AuthServiceServer is the server API for AuthService service.
 // All implementations must embed UnimplementedAuthServiceServer
 // for forward compatibility
 type AuthServiceServer interface {
 	SignInByEmail(context.Context, *SignInByEmailRequest) (*AccountDetails, error)
+	SignInByCPF(context.Context, *SignInByCPFRequest) (*AccountDetails, error)
 	mustEmbedUnimplementedAuthServiceServer()
 }
 
@@ -52,6 +63,9 @@ type UnimplementedAuthServiceServer struct {
 
 func (UnimplementedAuthServiceServer) SignInByEmail(context.Context, *SignInByEmailRequest) (*AccountDetails, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SignInByEmail not implemented")
+}
+func (UnimplementedAuthServiceServer) SignInByCPF(context.Context, *SignInByCPFRequest) (*AccountDetails, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SignInByCPF not implemented")
 }
 func (UnimplementedAuthServiceServer) mustEmbedUnimplementedAuthServiceServer() {}
 
@@ -84,6 +98,24 @@ func _AuthService_SignInByEmail_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AuthService_SignInByCPF_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SignInByCPFRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).SignInByCPF(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto.AuthService/SignInByCPF",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).SignInByCPF(ctx, req.(*SignInByCPFRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AuthService_ServiceDesc is the grpc.ServiceDesc for AuthService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -94,6 +126,10 @@ var AuthService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SignInByEmail",
 			Handler:    _AuthService_SignInByEmail_Handler,
+		},
+		{
+			MethodName: "SignInByCPF",
+			Handler:    _AuthService_SignInByCPF_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
