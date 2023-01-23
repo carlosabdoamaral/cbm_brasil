@@ -43,4 +43,5 @@ var (
 	GrpcServer           *grpc.Server     = &grpc.Server{}
 	GrpcConn             *grpc.ClientConn = &grpc.ClientConn{}
 	AccountServiceClient                  = pb.NewAccountServiceClient(GrpcConn)
+	AuthServiceClient                     = pb.NewAuthServiceClient(GrpcConn)
 )

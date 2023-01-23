@@ -13,6 +13,10 @@ type AccountServer struct {
 	pb.UnimplementedAccountServiceServer
 }
 
+type AuthServer struct {
+	pb.UnimplementedAuthServiceServer
+}
+
 func ServeGrpcServer() {
 	fmt.Println("[*] Starting GRPC")
 	lis, err := net.Listen("tcp", ":50051")
@@ -23,6 +27,7 @@ func ServeGrpcServer() {
 
 	common.GrpcServer = grpc.NewServer()
 	pb.RegisterAccountServiceServer(common.GrpcServer, &AccountServer{})
+	pb.RegisterAuthServiceServer(common.GrpcServer, &AuthServer{})
 
 	fmt.Printf("[*] Server listening on %v", lis.Addr())
 	err = common.GrpcServer.Serve(lis)

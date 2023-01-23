@@ -3,7 +3,8 @@
 [PUT]    /api/account/edit
 [DELETE] /api/account/soft-delete
 
-[POST]   /api/auth/sign-in
+[POST]   /api/auth/sign-in/cpf
+[POST]   /api/auth/sign-in/email
 [POST]   /api/auth/sign-out
 [PUT]    /api/auth/recover
 

@@ -1,0 +1,14 @@
+syntax = "proto3";
+package proto;
+option go_package = "./proto";
+
+import "account.proto";
+
+service AuthService {
+    rpc SignInByEmail(SignInByEmailRequest) returns (AccountDetails);
+}
+
+message SignInByEmailRequest {
+    string email = 1;
+    string password = 2;
+}
