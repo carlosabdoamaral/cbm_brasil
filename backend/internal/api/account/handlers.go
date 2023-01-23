@@ -111,3 +111,29 @@ func HandleSoftDeleteAccountRequest(ctx *gin.Context) {
 
 	ctx.IndentedJSON(http.StatusOK, responses.NewStatusResponseFromProtoToJSON(res))
 }
+
+func HandleRecoverRequest(ctx *gin.Context) {
+	body, err := ioutil.ReadAll(ctx.Request.Body)
+	if err != nil {
+		common.LogError(err.Error())
+		ctx.IndentedJSON(http.StatusInternalServerError, err.Error())
+	}
+
+	jsonModel := responses.AccountSoftDeleteRequestJSON{}
+	err = json.Unmarshal(body, &jsonModel)
+	if err != nil {
+		common.LogError(err.Error())
+		ctx.IndentedJSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	protoMessage := responses.NewAccountSoftDeleteRequestFromJSONToProto(&jsonModel)
+	res, err := common.AccountServiceClient.RecoverAccountById(ctx.Request.Context(), protoMessage)
+	if err != nil {
+		common.LogError(err.Error())
+		ctx.IndentedJSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	ctx.IndentedJSON(http.StatusOK, responses.NewStatusResponseFromProtoToJSON(res))
+}

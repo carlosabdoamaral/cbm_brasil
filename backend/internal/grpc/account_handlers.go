@@ -35,7 +35,16 @@ func (s *AccountServer) EditById(ctx context.Context, req *pb.EditAccountByIdReq
 }
 
 func (s *AccountServer) SoftDeleteById(ctx context.Context, req *pb.AccountSoftDeleteByIdRequest) (*pb.StatusResponse, error) {
-	res, err := persistence.SoftDeleteById(&ctx, req)
+	res, err := persistence.UpdateSoftDeleteStateById(&ctx, true, req)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
+func (s *AccountServer) RecoverAccountById(ctx context.Context, req *pb.AccountSoftDeleteByIdRequest) (*pb.StatusResponse, error) {
+	res, err := persistence.UpdateSoftDeleteStateById(&ctx, false, req)
 	if err != nil {
 		return nil, err
 	}

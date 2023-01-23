@@ -22,6 +22,7 @@ type AccountServiceClient interface {
 	GetById(ctx context.Context, in *GetAccountByIdRequest, opts ...grpc.CallOption) (*AccountDetails, error)
 	EditById(ctx context.Context, in *EditAccountByIdRequest, opts ...grpc.CallOption) (*AccountDetails, error)
 	SoftDeleteById(ctx context.Context, in *AccountSoftDeleteByIdRequest, opts ...grpc.CallOption) (*StatusResponse, error)
+	RecoverAccountById(ctx context.Context, in *AccountSoftDeleteByIdRequest, opts ...grpc.CallOption) (*StatusResponse, error)
 }
 
 type accountServiceClient struct {
@@ -68,6 +69,15 @@ func (c *accountServiceClient) SoftDeleteById(ctx context.Context, in *AccountSo
 	return out, nil
 }
 
+func (c *accountServiceClient) RecoverAccountById(ctx context.Context, in *AccountSoftDeleteByIdRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
+	out := new(StatusResponse)
+	err := c.cc.Invoke(ctx, "/proto.AccountService/RecoverAccountById", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AccountServiceServer is the server API for AccountService service.
 // All implementations must embed UnimplementedAccountServiceServer
 // for forward compatibility
@@ -76,6 +86,7 @@ type AccountServiceServer interface {
 	GetById(context.Context, *GetAccountByIdRequest) (*AccountDetails, error)
 	EditById(context.Context, *EditAccountByIdRequest) (*AccountDetails, error)
 	SoftDeleteById(context.Context, *AccountSoftDeleteByIdRequest) (*StatusResponse, error)
+	RecoverAccountById(context.Context, *AccountSoftDeleteByIdRequest) (*StatusResponse, error)
 	mustEmbedUnimplementedAccountServiceServer()
 }
 
@@ -94,6 +105,9 @@ func (UnimplementedAccountServiceServer) EditById(context.Context, *EditAccountB
 }
 func (UnimplementedAccountServiceServer) SoftDeleteById(context.Context, *AccountSoftDeleteByIdRequest) (*StatusResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SoftDeleteById not implemented")
+}
+func (UnimplementedAccountServiceServer) RecoverAccountById(context.Context, *AccountSoftDeleteByIdRequest) (*StatusResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RecoverAccountById not implemented")
 }
 func (UnimplementedAccountServiceServer) mustEmbedUnimplementedAccountServiceServer() {}
 
@@ -180,6 +194,24 @@ func _AccountService_SoftDeleteById_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AccountService_RecoverAccountById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AccountSoftDeleteByIdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AccountServiceServer).RecoverAccountById(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto.AccountService/RecoverAccountById",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AccountServiceServer).RecoverAccountById(ctx, req.(*AccountSoftDeleteByIdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AccountService_ServiceDesc is the grpc.ServiceDesc for AccountService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -202,6 +234,10 @@ var AccountService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SoftDeleteById",
 			Handler:    _AccountService_SoftDeleteById_Handler,
+		},
+		{
+			MethodName: "RecoverAccountById",
+			Handler:    _AccountService_RecoverAccountById_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

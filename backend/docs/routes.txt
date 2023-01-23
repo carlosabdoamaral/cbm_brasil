@@ -1,12 +1,11 @@
-[POST]   /api/account/new
-[GET]    /api/account/by-id
-[PUT]    /api/account/edit
-[DELETE] /api/account/soft-delete
+[OK] [POST]   /api/account/new
+[OK] [GET]    /api/account/by-id
+[OK] [PUT]    /api/account/edit
+[OK] [PUT]    /api/account/recover
+[OK] [DELETE] /api/account/soft-delete
 
-[POST]   /api/auth/sign-in/cpf
-[POST]   /api/auth/sign-in/email
-[POST]   /api/auth/sign-out
-[PUT]    /api/auth/recover
+[OK] [POST]   /api/auth/sign-in/cpf
+[OK] [POST]   /api/auth/sign-in/email
 
 [POST]   /api/occurrence/new
 [GET]    /api/occurrence/by-id

@@ -67,7 +67,3 @@ func HandleSignInRequestByEmail(ctx *gin.Context) {
 
 	ctx.IndentedJSON(http.StatusOK, responses.NewAccountDetailsFromProtoToJSON(res))
 }
-
-func HandleSignOutRequest(ctx *gin.Context) {}
-
-func HandleRecoverRequest(ctx *gin.Context) {}

@@ -10,6 +10,7 @@ service AccountService {
     rpc GetById(GetAccountByIdRequest) returns (AccountDetails);
     rpc EditById(EditAccountByIdRequest) returns (AccountDetails);
     rpc SoftDeleteById(AccountSoftDeleteByIdRequest) returns (StatusResponse);
+    rpc RecoverAccountById(AccountSoftDeleteByIdRequest) returns (StatusResponse);
 }
 
 message AccountSoftDeleteByIdRequest {

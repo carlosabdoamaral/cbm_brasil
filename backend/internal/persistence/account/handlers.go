@@ -247,17 +247,17 @@ func EditAccountById(ctx *context.Context, req *pb.EditAccountByIdRequest) (*pb.
 	return accountDetails, nil
 }
 
-func SoftDeleteById(ctx *context.Context, req *pb.AccountSoftDeleteByIdRequest) (*pb.StatusResponse, error) {
-	query := `UPDATE account_tb SET soft_deleted = true WHERE id = $1`
+func UpdateSoftDeleteStateById(ctx *context.Context, newState bool, req *pb.AccountSoftDeleteByIdRequest) (*pb.StatusResponse, error) {
+	query := `UPDATE account_tb SET soft_deleted = $1 WHERE id = $2`
 
 	db := common.Database
-	_, err := db.Exec(query, req.GetId())
+	_, err := db.Exec(query, newState, req.GetId())
 	if err != nil {
 		common.LogError(err.Error())
 		return nil, err
 	}
 
 	return &pb.StatusResponse{
-		Message: "Account soft deleted successfully",
+		Message: "Account soft deleted successfully updated",
 	}, nil
 }
