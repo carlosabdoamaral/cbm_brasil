@@ -7,5 +7,5 @@ func DeclareAccountRoutes(router *gin.Engine) {
 	g.POST("/new", HandleNewAccountRequest)
 	g.POST("/by-id", HandleFetchAccountByIdRequest)
 	g.PUT("/edit", HandleEditAccountRequest)
-	g.DELETE("/api/soft-delete", HandleSoftDeleteAccountRequest)
+	g.DELETE("/soft-delete", HandleSoftDeleteAccountRequest)
 }

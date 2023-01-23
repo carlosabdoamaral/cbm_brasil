@@ -19,3 +19,19 @@ func NewJwtTokenFromJSONToProto(jsonMessage *JwtToken) *pb.JwtToken {
 		Token: jsonMessage.Jwt,
 	}
 }
+
+type StatusResponse struct {
+	Message string `json:"message,omitempty"`
+}
+
+func NewStatusResponseFromProtoToJSON(protoMessage *pb.StatusResponse) *StatusResponse {
+	return &StatusResponse{
+		Message: protoMessage.GetMessage(),
+	}
+}
+
+func NewStatusResponseFromJSONToProto(jsonMessage *StatusResponse) *pb.StatusResponse {
+	return &pb.StatusResponse{
+		Message: jsonMessage.Message,
+	}
+}

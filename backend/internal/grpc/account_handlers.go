@@ -33,3 +33,12 @@ func (s *AccountServer) EditById(ctx context.Context, req *pb.EditAccountByIdReq
 
 	return res, nil
 }
+
+func (s *AccountServer) SoftDeleteById(ctx context.Context, req *pb.AccountSoftDeleteByIdRequest) (*pb.StatusResponse, error) {
+	res, err := persistence.SoftDeleteById(&ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}

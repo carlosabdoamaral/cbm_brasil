@@ -11,5 +11,5 @@ message JwtToken {
 }
 
 message StatusResponse {
-    string status = 1;
+    string message = 1;
 }

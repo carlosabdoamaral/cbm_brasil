@@ -2,12 +2,19 @@ syntax = "proto3";
 package proto;
 option go_package = "./proto";
 
+import "common.proto";
 import "google/protobuf/timestamp.proto";
 
 service AccountService {
     rpc Create(NewAccountRequest) returns (AccountDetails);
     rpc GetById(GetAccountByIdRequest) returns (AccountDetails);
     rpc EditById(EditAccountByIdRequest) returns (AccountDetails);
+    rpc SoftDeleteById(AccountSoftDeleteByIdRequest) returns (StatusResponse);
+}
+
+message AccountSoftDeleteByIdRequest {
+    int64 id = 1;
+    string auth_token = 2;
 }
 
 message EditAccountByIdRequest {
