@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	common.ReadEnvVariables()
+	common.GetEnvVariables()
 
 	rabbit.Connect()
 	rabbit.DeclareQueue()

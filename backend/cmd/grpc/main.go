@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	common.ReadEnvVariables()
+	common.GetEnvVariables()
 
 	_, err := persistence.Connect()
 	if err != nil {

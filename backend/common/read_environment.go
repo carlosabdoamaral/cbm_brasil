@@ -10,6 +10,8 @@ import (
 func GetEnvVariables() error {
 	errEnv := godotenv.Load(".env")
 	if errEnv != nil {
+		fmt.Println(errEnv.Error())
+		fmt.Println("Failed to load env file. Make sure .env file exists!")
 		return errEnv
 	}
 
@@ -25,12 +27,4 @@ func GetEnvVariables() error {
 	RabbitQueueName = os.Getenv("RABBIT_QUEUENAME")
 
 	return nil
-}
-
-func ReadEnvVariables() {
-	envErr := GetEnvVariables()
-	if envErr != nil {
-		fmt.Println(envErr.Error())
-		fmt.Println("Failed to load env file. Make sure .env file exists!")
-	}
 }
