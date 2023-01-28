@@ -39,7 +39,11 @@ func GetAllOccurrences(ctx *context.Context) (*pb.OccurrenceDetailsList, error) 
 func AcceptOccurenceByIdHandler(ctx *context.Context, req *pb.UpdateOccurrenceStatus) (*pb.StatusResponse, error) {
 	query := `
 	UPDATE occurrence_tb
-	SET id_firefighter = $1, accepted_at = NOW(), updated_at = NOW()
+	SET 
+		id_firefighter = $1,
+		is_accepted = TRUE,
+		accepted_at = NOW(),
+		updated_at = NOW()
 	WHERE id = $2;`
 
 	db := common.Database

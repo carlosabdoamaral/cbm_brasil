@@ -43,20 +43,27 @@ message OccurrenceDetails {
     string title = 2;
     string description = 3;
     string banner_x64 = 4;
-    google.protobuf.Timestamp created_at = 5;
-    google.protobuf.Timestamp updated_at = 6;
-    google.protobuf.Timestamp accepted_at = 7;
-    bool soft_deleted = 8;
+    bool soft_deleted = 5;
 
-    int64 id_firefighter = 9;
-    string firefighter_full_name = 10;
-    string firefighter_email = 11;
+    int64 id_firefighter = 6;
+    string firefighter_full_name = 7;
+    string firefighter_email = 8;
 
-    int64 id_author = 12;
-    string author_full_name = 13;
-    string author_email = 14;
+    int64 id_author = 9;
+    string author_full_name = 10;
+    string author_email = 11;
 
-    OccurrenceDetailsLocation location = 15;
+    google.protobuf.Timestamp created_at = 12;
+    google.protobuf.Timestamp updated_at = 13;
+    google.protobuf.Timestamp accepted_at = 14;
+    google.protobuf.Timestamp canceled_at = 15;
+    google.protobuf.Timestamp finished_at = 16;
+    
+    bool is_accepted = 17;
+    bool is_canceled = 18;
+    bool is_finished = 19;
+
+    OccurrenceDetailsLocation location = 20;
 }
 message OccurrenceDetailsLocation {
     int64 id = 1;

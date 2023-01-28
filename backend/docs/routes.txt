@@ -4,6 +4,12 @@
 [OK] [PUT]    /api/account/recover
 [OK] [DELETE] /api/account/soft-delete
 
+[POST]   /api/firefighter/new
+[GET]    /api/firefighter/by-id
+[PUT]    /api/firefighter/edit
+[PUT]    /api/firefighter/recover
+[DELETE] /api/firefighter/soft-delete
+
 [OK] [POST]   /api/auth/sign-in/cpf
 [OK] [POST]   /api/auth/sign-in/email
 
