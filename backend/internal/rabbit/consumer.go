@@ -34,6 +34,14 @@ func StartConsuming() {
 			if m.Type == common.ACCEPT_OCCURRENCE_RABBIT_MSG_TYPE {
 				ConsumeAcceptOccurrenceRequest(context.Background(), m.Body)
 			}
+
+			if m.Type == common.CANCEL_OCCURRENCE_RABBIT_MSG_TYPE {
+				ConsumeCancelOccurrenceRequest(context.Background(), m.Body)
+			}
+
+			if m.Type == common.FINISH_OCCURRENCE_RABBIT_MSG_TYPE {
+				ConsumeFinishOccurrenceRequest(context.Background(), m.Body)
+			}
 		}
 	}()
 

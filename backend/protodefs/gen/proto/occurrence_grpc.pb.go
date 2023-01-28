@@ -26,6 +26,7 @@ type OccurreceServiceClient interface {
 	AcceptById(ctx context.Context, in *UpdateOccurrenceStatus, opts ...grpc.CallOption) (*StatusResponse, error)
 	RefuseById(ctx context.Context, in *UpdateOccurrenceStatus, opts ...grpc.CallOption) (*StatusResponse, error)
 	CancelById(ctx context.Context, in *UpdateOccurrenceStatus, opts ...grpc.CallOption) (*StatusResponse, error)
+	FinishById(ctx context.Context, in *UpdateOccurrenceStatus, opts ...grpc.CallOption) (*StatusResponse, error)
 }
 
 type occurreceServiceClient struct {
@@ -108,6 +109,15 @@ func (c *occurreceServiceClient) CancelById(ctx context.Context, in *UpdateOccur
 	return out, nil
 }
 
+func (c *occurreceServiceClient) FinishById(ctx context.Context, in *UpdateOccurrenceStatus, opts ...grpc.CallOption) (*StatusResponse, error) {
+	out := new(StatusResponse)
+	err := c.cc.Invoke(ctx, "/proto.OccurreceService/FinishById", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // OccurreceServiceServer is the server API for OccurreceService service.
 // All implementations must embed UnimplementedOccurreceServiceServer
 // for forward compatibility
@@ -120,6 +130,7 @@ type OccurreceServiceServer interface {
 	AcceptById(context.Context, *UpdateOccurrenceStatus) (*StatusResponse, error)
 	RefuseById(context.Context, *UpdateOccurrenceStatus) (*StatusResponse, error)
 	CancelById(context.Context, *UpdateOccurrenceStatus) (*StatusResponse, error)
+	FinishById(context.Context, *UpdateOccurrenceStatus) (*StatusResponse, error)
 	mustEmbedUnimplementedOccurreceServiceServer()
 }
 
@@ -150,6 +161,9 @@ func (UnimplementedOccurreceServiceServer) RefuseById(context.Context, *UpdateOc
 }
 func (UnimplementedOccurreceServiceServer) CancelById(context.Context, *UpdateOccurrenceStatus) (*StatusResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CancelById not implemented")
+}
+func (UnimplementedOccurreceServiceServer) FinishById(context.Context, *UpdateOccurrenceStatus) (*StatusResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FinishById not implemented")
 }
 func (UnimplementedOccurreceServiceServer) mustEmbedUnimplementedOccurreceServiceServer() {}
 
@@ -308,6 +322,24 @@ func _OccurreceService_CancelById_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _OccurreceService_FinishById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateOccurrenceStatus)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OccurreceServiceServer).FinishById(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto.OccurreceService/FinishById",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OccurreceServiceServer).FinishById(ctx, req.(*UpdateOccurrenceStatus))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // OccurreceService_ServiceDesc is the grpc.ServiceDesc for OccurreceService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -346,6 +378,10 @@ var OccurreceService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CancelById",
 			Handler:    _OccurreceService_CancelById_Handler,
+		},
+		{
+			MethodName: "FinishById",
+			Handler:    _OccurreceService_FinishById_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

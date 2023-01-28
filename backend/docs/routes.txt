@@ -4,21 +4,23 @@
 [OK] [PUT]    /api/account/recover
 [OK] [DELETE] /api/account/soft-delete
 
-[POST]   /api/firefighter/new
-[GET]    /api/firefighter/by-id
-[PUT]    /api/firefighter/edit
-[PUT]    /api/firefighter/recover
-[DELETE] /api/firefighter/soft-delete
-
 [OK] [POST]   /api/auth/sign-in/cpf
 [OK] [POST]   /api/auth/sign-in/email
+
+[POST]         /api/firefighter/new
+[GET]          /api/firefighter/by-id
+[PUT]          /api/firefighter/edit
+[PUT]          /api/firefighter/recover
+[DELETE]       /api/firefighter/soft-delete
+
 
 [OK] [POST]   /api/occurrence/new
 [OK] [GET]    /api/occurrence/by-id
 [OK] [GET]    /api/occurrence/all
-[GET]    /api/occurrence/nearby
-[PUT]    /api/occurrence/edit
-[PUT]    /api/occurrence/accept
-[PUT]    /api/occurrence/cancel
-[PUT]    /api/occurrence/finish
-[DELETE] /api/occurrence/soft-delete
+[GET]         /api/occurrence/nearby
+[PUT]         /api/occurrence/edit
+[OK] [PUT]    /api/occurrence/accept
+[OK] [PUT]    /api/occurrence/cancel
+[OK] [PUT]    /api/occurrence/finish
+[PUT]         /api/occurrence/reopen
+[PUT]         /api/occurrence/restore

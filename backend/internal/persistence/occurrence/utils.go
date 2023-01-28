@@ -24,7 +24,6 @@ const selectOccurrenceDetailsQuery = `
 		occurrence_tb.canceled_at as occurrence_canceled_at,
 		occurrence_tb.finished_at as occurrence_finished_at,
 
-		occurrence_tb.soft_deleted as occurrence_is_soft_deleted,
 		occurrence_tb.is_accepted as occurrence_is_accepted,
 		occurrence_tb.is_canceled as occurrence_is_canceled,
 		occurrence_tb.is_finished as occurrence_is_finished,
@@ -68,7 +67,6 @@ func scanOccurrenceDetailsRows(rows *sql.Rows) (*pb.OccurrenceDetails, error) {
 		&jsonModel.CanceledAt,
 		&jsonModel.FinishedAt,
 
-		&jsonModel.SoftDeleted,
 		&jsonModel.IsAccepted,
 		&jsonModel.IsCanceled,
 		&jsonModel.IsFinished,
@@ -101,7 +99,7 @@ func scanOccurrenceDetailsRows(rows *sql.Rows) (*pb.OccurrenceDetails, error) {
 	return responses.NewOccurrenceDetailsModelFromJSONToProto(jsonModel), nil
 }
 
-func insertOccurrence(ctx *context.Context, req *pb.CreateOccurrence) (idOccurrence int64, err error) {
+func insertOccurrence(ctx context.Context, req *pb.CreateOccurrence) (idOccurrence int64, err error) {
 	var (
 		db    *sql.DB = common.Database
 		query string  = `
@@ -134,7 +132,7 @@ func insertOccurrence(ctx *context.Context, req *pb.CreateOccurrence) (idOccurre
 	return
 }
 
-func insertOccurrenceLocationById(ctx *context.Context, idOccurrence int64, location *pb.CreateOccurrenceLocation) (err error) {
+func insertOccurrenceLocationById(ctx context.Context, idOccurrence int64, location *pb.CreateOccurrenceLocation) (err error) {
 	var (
 		db    *sql.DB = common.Database
 		query string  = `
@@ -163,7 +161,7 @@ func insertOccurrenceLocationById(ctx *context.Context, idOccurrence int64, loca
 	return nil
 }
 
-func insertOccurrenceLogById(ctx *context.Context, id int64, log string) (err error) {
+func insertOccurrenceLogById(ctx context.Context, id int64, log string) (err error) {
 	var (
 		db    *sql.DB = common.Database
 		query string  = `INSERT INTO occurrence_logs_tb(id_occurrence, msg) VALUES ($1, $2);`

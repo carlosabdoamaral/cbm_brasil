@@ -8,7 +8,7 @@ import (
 	pb "github.com/carlosabdoamaral/cbm_brasil/backend/protodefs/gen/proto"
 )
 
-func CreateOccurrenceHandler(ctx *context.Context, req *pb.CreateOccurrence) error {
+func CreateOccurrenceHandler(ctx context.Context, req *pb.CreateOccurrence) error {
 	idOccurrence, err := insertOccurrence(ctx, req)
 	if err != nil {
 		return err
@@ -28,15 +28,15 @@ func CreateOccurrenceHandler(ctx *context.Context, req *pb.CreateOccurrence) err
 	return nil
 }
 
-func GetOccurreceByIdHandler(ctx *context.Context, req *pb.Id) (*pb.OccurrenceDetails, error) {
+func GetOccurreceByIdHandler(ctx context.Context, req *pb.Id) (*pb.OccurrenceDetails, error) {
 	return selectOccurrenceById(req.GetId())
 }
 
-func GetAllOccurrences(ctx *context.Context) (*pb.OccurrenceDetailsList, error) {
+func GetAllOccurrences(ctx context.Context) (*pb.OccurrenceDetailsList, error) {
 	return selectAllOccurrences()
 }
 
-func AcceptOccurenceByIdHandler(ctx *context.Context, req *pb.UpdateOccurrenceStatus) (*pb.StatusResponse, error) {
+func AcceptOccurenceByIdHandler(ctx context.Context, req *pb.UpdateOccurrenceStatus) (*pb.StatusResponse, error) {
 	query := `
 	UPDATE occurrence_tb
 	SET 
@@ -62,5 +62,63 @@ func AcceptOccurenceByIdHandler(ctx *context.Context, req *pb.UpdateOccurrenceSt
 
 	return &pb.StatusResponse{
 		Message: "occurrence accepted successfully!",
+	}, nil
+}
+
+func CancelOccurenceByIdHandler(ctx context.Context, req *pb.UpdateOccurrenceStatus) (*pb.StatusResponse, error) {
+	query := `
+	UPDATE occurrence_tb
+	SET 
+		id_firefighter = $1,
+		is_canceled = TRUE,
+		canceled_at = NOW(),
+		updated_at = NOW()
+	WHERE id = $2;`
+
+	db := common.Database
+	_, err := db.Exec(query, req.GetIdFirefighter(), req.GetIdOccurrence())
+	if err != nil {
+		common.LogError(err.Error())
+		return nil, err
+	}
+
+	logMsg := fmt.Sprintf("occurrence %d was canceled by firefighter with id %d", req.GetIdOccurrence(), req.GetIdFirefighter())
+	err = insertOccurrenceLogById(ctx, req.GetIdOccurrence(), logMsg)
+	if err != nil {
+		common.LogError(err.Error())
+		return nil, err
+	}
+
+	return &pb.StatusResponse{
+		Message: "occurrence canceled successfully!",
+	}, nil
+}
+
+func FinishOccurenceByIdHandler(ctx context.Context, req *pb.UpdateOccurrenceStatus) (*pb.StatusResponse, error) {
+	query := `
+	UPDATE occurrence_tb
+	SET 
+		id_firefighter = $1,
+		is_finished = TRUE,
+		finished_at = NOW(),
+		updated_at = NOW()
+	WHERE id = $2;`
+
+	db := common.Database
+	_, err := db.Exec(query, req.GetIdFirefighter(), req.GetIdOccurrence())
+	if err != nil {
+		common.LogError(err.Error())
+		return nil, err
+	}
+
+	logMsg := fmt.Sprintf("occurrence %d was finished by firefighter with id %d", req.GetIdOccurrence(), req.GetIdFirefighter())
+	err = insertOccurrenceLogById(ctx, req.GetIdOccurrence(), logMsg)
+	if err != nil {
+		common.LogError(err.Error())
+		return nil, err
+	}
+
+	return &pb.StatusResponse{
+		Message: "occurrence finished successfully!",
 	}, nil
 }

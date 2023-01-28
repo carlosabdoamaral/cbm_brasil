@@ -12,5 +12,4 @@ func DeclareOccurrenceRoutes(router *gin.Engine) {
 	g.PUT("/accept", HandleAcceptOccurrenceRequest)
 	g.PUT("/cancel", HandleCancelOccurrenceRequest)
 	g.PUT("/finish", HandleFinishOccurenceRequest)
-	g.DELETE("/soft-delete", HandleSoftDeleteOccurrenceById)
 }

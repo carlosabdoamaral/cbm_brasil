@@ -39,3 +39,35 @@ func ConsumeAcceptOccurrenceRequest(ctx context.Context, body []byte) {
 		return
 	}
 }
+
+func ConsumeCancelOccurrenceRequest(ctx context.Context, body []byte) {
+	common.LogInfo("ConsumeCancelOccurrenceRequest")
+
+	jsonModel := responses.UpdateOccurrenceStatus{}
+	err := json.Unmarshal(body, &jsonModel)
+	if err != nil {
+		return
+	}
+
+	protoMessage := responses.NewUpdateOccurrenceStatusByIdModelFromJSONToProto(&jsonModel)
+	_, err = common.OccurrenceServiceClient.CancelById(ctx, protoMessage)
+	if err != nil {
+		return
+	}
+}
+
+func ConsumeFinishOccurrenceRequest(ctx context.Context, body []byte) {
+	common.LogInfo("ConsumeFinishOccurrenceRequest")
+
+	jsonModel := responses.UpdateOccurrenceStatus{}
+	err := json.Unmarshal(body, &jsonModel)
+	if err != nil {
+		return
+	}
+
+	protoMessage := responses.NewUpdateOccurrenceStatusByIdModelFromJSONToProto(&jsonModel)
+	_, err = common.OccurrenceServiceClient.FinishById(ctx, protoMessage)
+	if err != nil {
+		return
+	}
+}

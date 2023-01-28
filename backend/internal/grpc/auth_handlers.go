@@ -9,7 +9,7 @@ import (
 )
 
 func (s *AuthServer) SignInByEmail(ctx context.Context, req *pb.SignInByEmailRequest) (*pb.AccountDetails, error) {
-	common.LogInfo("[GRPC] SignInByEmail")
+	common.LogInfo("AuthServer - SignInByEmail")
 
 	accountDetails, err := persistence.SignInByEmail(&ctx, req)
 	if err != nil {
@@ -20,7 +20,7 @@ func (s *AuthServer) SignInByEmail(ctx context.Context, req *pb.SignInByEmailReq
 }
 
 func (s *AuthServer) SignInByCPF(ctx context.Context, req *pb.SignInByCPFRequest) (*pb.AccountDetails, error) {
-	common.LogInfo("[GRPC] SignInByCPF")
+	common.LogInfo("AuthServer - SignInByCPF")
 
 	accountDetails, err := persistence.SignInByCPF(&ctx, req)
 	if err != nil {
