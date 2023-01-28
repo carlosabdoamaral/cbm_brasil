@@ -27,3 +27,7 @@ func (s *OccurrenceServer) GetById(ctx context.Context, req *pb.Id) (*pb.Occurre
 func (s *OccurrenceServer) GetAll(ctx context.Context, req *pb.Id) (*pb.OccurrenceDetailsList, error) {
 	return persistence.GetAllOccurrences(&ctx)
 }
+
+func (s *OccurrenceServer) AcceptById(ctx context.Context, req *pb.UpdateOccurrenceStatus) (*pb.StatusResponse, error) {
+	return persistence.AcceptOccurenceByIdHandler(&ctx, req)
+}

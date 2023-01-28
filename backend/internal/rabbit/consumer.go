@@ -31,7 +31,9 @@ func StartConsuming() {
 				ConsumeCreateOccurrenceRequest(context.Background(), m.Body)
 			}
 
-			fmt.Println(string(m.Body))
+			if m.Type == common.ACCEPT_OCCURRENCE_RABBIT_MSG_TYPE {
+				ConsumeAcceptOccurrenceRequest(context.Background(), m.Body)
+			}
 		}
 	}()
 

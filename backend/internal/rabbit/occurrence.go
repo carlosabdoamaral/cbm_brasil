@@ -23,3 +23,19 @@ func ConsumeCreateOccurrenceRequest(ctx context.Context, body []byte) {
 		return
 	}
 }
+
+func ConsumeAcceptOccurrenceRequest(ctx context.Context, body []byte) {
+	common.LogInfo("ConsumeAcceptOccurrenceRequest")
+
+	jsonModel := responses.UpdateOccurrenceStatus{}
+	err := json.Unmarshal(body, &jsonModel)
+	if err != nil {
+		return
+	}
+
+	protoMessage := responses.NewUpdateOccurrenceStatusByIdModelFromJSONToProto(&jsonModel)
+	_, err = common.OccurrenceServiceClient.AcceptById(ctx, protoMessage)
+	if err != nil {
+		return
+	}
+}
