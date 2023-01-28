@@ -23,6 +23,7 @@ func ConnectToGRPCServer() *grpc.ClientConn {
 	common.GrpcConn = conn
 	common.AccountServiceClient = pb.NewAccountServiceClient(conn)
 	common.AuthServiceClient = pb.NewAuthServiceClient(conn)
+	common.OccurrenceServiceClient = pb.NewOccurreceServiceClient(conn)
 
 	return conn
 }

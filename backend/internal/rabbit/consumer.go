@@ -1,6 +1,7 @@
 package rabbit
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/carlosabdoamaral/cbm_brasil/backend/common"
@@ -26,10 +27,9 @@ func StartConsuming() {
 		fmt.Println("[*] Waiting for new messages")
 
 		for m := range msgs {
-			// Ex.:
-			// if m.Type == common.NEW_ACCOUNT_REQUEST_QUEUE_TYPE {
-			// 	NewAccountQueueHandler()
-			// }
+			if m.Type == common.CREATE_OCCURRENCE_RABBIT_MSG_TYPE {
+				ConsumeCreateOccurrenceRequest(context.Background(), m.Body)
+			}
 
 			fmt.Println(string(m.Body))
 		}

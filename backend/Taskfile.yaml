@@ -13,17 +13,17 @@ tasks:
     cmds:
       - go run cmd/api/main.go
 
-  migrate-up:
+  migration-up:
     cmds:
       - migrate -path ./internal/persistence/migrations -database "postgresql://postgres:postgres@localhost:5432/postgres?sslmode=disable" -verbose up
 
-  migrate-down:
+  migration-down:
     cmds:
       - migrate -path ./internal/persistence/migrations -database "postgresql://postgres:postgres@localhost:5432/postgres?sslmode=disable" -verbose down
 
   create-migration:
     cmds:
-      - migrate create -ext sql -dir ./internal/persistence/migrations -seq init_data
+      - migrate create -ext sql -dir ./internal/persistence/migrations -seq config_db
 
   build-docker:
     cmds:

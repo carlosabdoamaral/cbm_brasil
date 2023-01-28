@@ -9,6 +9,7 @@ import (
 	"github.com/carlosabdoamaral/cbm_brasil/backend/internal/api/occurrence"
 	"github.com/carlosabdoamaral/cbm_brasil/backend/internal/grpc"
 	"github.com/carlosabdoamaral/cbm_brasil/backend/internal/persistence"
+	"github.com/carlosabdoamaral/cbm_brasil/backend/internal/rabbit"
 	"github.com/gin-gonic/gin"
 )
 
@@ -21,6 +22,7 @@ func main() {
 		return
 	}
 
+	rabbit.Connect()
 	grpc.ConnectToGRPCServer()
 
 	router := gin.Default()

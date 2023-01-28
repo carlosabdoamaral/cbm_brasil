@@ -1,0 +1,91 @@
+syntax = "proto3";
+package proto;
+option go_package = "./proto";
+
+import "common.proto";
+import "google/protobuf/timestamp.proto";
+
+service OccurreceService {
+    rpc Create(CreateOccurrence) returns (StatusResponse);
+    rpc GetById(Id) returns (OccurrenceDetails);
+    rpc EditById(EditOccurrence) returns (OccurrenceDetails);
+    rpc SoftDeleteById(Id) returns (StatusResponse);
+    rpc AcceptById(UpdateOccurrenceStatus) returns (StatusResponse);
+    rpc RefuseById(UpdateOccurrenceStatus) returns (StatusResponse);
+    rpc CancelById(UpdateOccurrenceStatus) returns (StatusResponse);
+}
+
+message CreateOccurrence {
+    int64 id_firefighter = 1;
+    int64 id_author = 2;
+    string banner_x64 = 3;
+    string title = 4;
+    string description = 5;
+    google.protobuf.Timestamp created_at = 6;
+    CreateOccurrenceLocation location = 7;
+}
+message CreateOccurrenceLocation {
+    string cep = 1;
+    string country = 2;
+    string state = 3;
+    string city = 4;
+    string neighborhood = 5;
+    string street = 6;
+    int64 place_number = 7;
+    string complement = 8;
+    float latitude = 9;
+    float longitude = 10;
+}
+
+message OccurrenceDetails {
+    int64 id_author = 1;
+    int64 id_firefighter = 2;
+    string banner_x64 = 3;
+    string title = 4;
+    string description = 5;
+    google.protobuf.Timestamp created_at = 6;
+    google.protobuf.Timestamp updated_at = 7;
+    google.protobuf.Timestamp accepted_at = 8;
+    OccurrenceDetailsLocation location = 9;
+    bool soft_deleted = 10;
+}
+message OccurrenceDetailsLocation {
+    int64 id = 1;
+    string cep = 2;
+    string country = 3;
+    string state = 4;
+    string city = 5;
+    string neighborhood = 6;
+    string street = 7;
+    int64 place_number = 8;
+    string complement = 9;
+    float latitude = 10;
+    float longitude = 11;
+}
+
+message EditOccurrence {
+    int64 id = 1;
+    int64 id_author = 2;
+    string banner_x64 = 3;
+    string title = 4;
+    string description = 5;
+    EditOccurrenceLocation location = 6;
+}
+message EditOccurrenceLocation {
+    int64 id = 1;
+    string cep = 2;
+    string country = 3;
+    string state = 4;
+    string city = 5;
+    string neighborhood = 6;
+    string street = 7;
+    int64 place_number = 8;
+    string complement = 9;
+    float latitude = 10;
+    float longitude = 11;
+}
+
+message UpdateOccurrenceStatus {
+    int64 id_occurrence = 1;
+    int64 id_firefighter = 2;
+}

@@ -1,0 +1,5 @@
+package common
+
+const (
+	CREATE_OCCURRENCE_RABBIT_MSG_TYPE = "CREATE_OCCURRENCE"
+)
