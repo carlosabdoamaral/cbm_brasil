@@ -23,3 +23,7 @@ func (s *OccurrenceServer) Create(ctx context.Context, req *pb.CreateOccurrence)
 func (s *OccurrenceServer) GetById(ctx context.Context, req *pb.Id) (*pb.OccurrenceDetails, error) {
 	return persistence.GetOccurreceByIdHandler(&ctx, req)
 }
+
+func (s *OccurrenceServer) GetAll(ctx context.Context, req *pb.Id) (*pb.OccurrenceDetailsList, error) {
+	return persistence.GetAllOccurrences(&ctx)
+}

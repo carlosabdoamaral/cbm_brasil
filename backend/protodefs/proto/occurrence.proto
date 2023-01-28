@@ -8,6 +8,7 @@ import "google/protobuf/timestamp.proto";
 service OccurreceService {
     rpc Create(CreateOccurrence) returns (StatusResponse);
     rpc GetById(Id) returns (OccurrenceDetails);
+    rpc GetAll(Id) returns (OccurrenceDetailsList);
     rpc EditById(EditOccurrence) returns (OccurrenceDetails);
     rpc SoftDeleteById(Id) returns (StatusResponse);
     rpc AcceptById(UpdateOccurrenceStatus) returns (StatusResponse);
@@ -69,6 +70,10 @@ message OccurrenceDetailsLocation {
     string complement = 9;
     float latitude = 10;
     float longitude = 11;
+}
+
+message OccurrenceDetailsList {
+    repeated OccurrenceDetails list = 1;
 }
 
 message EditOccurrence {

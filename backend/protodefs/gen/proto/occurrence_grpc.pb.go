@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion7
 type OccurreceServiceClient interface {
 	Create(ctx context.Context, in *CreateOccurrence, opts ...grpc.CallOption) (*StatusResponse, error)
 	GetById(ctx context.Context, in *Id, opts ...grpc.CallOption) (*OccurrenceDetails, error)
+	GetAll(ctx context.Context, in *Id, opts ...grpc.CallOption) (*OccurrenceDetailsList, error)
 	EditById(ctx context.Context, in *EditOccurrence, opts ...grpc.CallOption) (*OccurrenceDetails, error)
 	SoftDeleteById(ctx context.Context, in *Id, opts ...grpc.CallOption) (*StatusResponse, error)
 	AcceptById(ctx context.Context, in *UpdateOccurrenceStatus, opts ...grpc.CallOption) (*StatusResponse, error)
@@ -47,6 +48,15 @@ func (c *occurreceServiceClient) Create(ctx context.Context, in *CreateOccurrenc
 func (c *occurreceServiceClient) GetById(ctx context.Context, in *Id, opts ...grpc.CallOption) (*OccurrenceDetails, error) {
 	out := new(OccurrenceDetails)
 	err := c.cc.Invoke(ctx, "/proto.OccurreceService/GetById", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *occurreceServiceClient) GetAll(ctx context.Context, in *Id, opts ...grpc.CallOption) (*OccurrenceDetailsList, error) {
+	out := new(OccurrenceDetailsList)
+	err := c.cc.Invoke(ctx, "/proto.OccurreceService/GetAll", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -104,6 +114,7 @@ func (c *occurreceServiceClient) CancelById(ctx context.Context, in *UpdateOccur
 type OccurreceServiceServer interface {
 	Create(context.Context, *CreateOccurrence) (*StatusResponse, error)
 	GetById(context.Context, *Id) (*OccurrenceDetails, error)
+	GetAll(context.Context, *Id) (*OccurrenceDetailsList, error)
 	EditById(context.Context, *EditOccurrence) (*OccurrenceDetails, error)
 	SoftDeleteById(context.Context, *Id) (*StatusResponse, error)
 	AcceptById(context.Context, *UpdateOccurrenceStatus) (*StatusResponse, error)
@@ -121,6 +132,9 @@ func (UnimplementedOccurreceServiceServer) Create(context.Context, *CreateOccurr
 }
 func (UnimplementedOccurreceServiceServer) GetById(context.Context, *Id) (*OccurrenceDetails, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetById not implemented")
+}
+func (UnimplementedOccurreceServiceServer) GetAll(context.Context, *Id) (*OccurrenceDetailsList, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAll not implemented")
 }
 func (UnimplementedOccurreceServiceServer) EditById(context.Context, *EditOccurrence) (*OccurrenceDetails, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method EditById not implemented")
@@ -182,6 +196,24 @@ func _OccurreceService_GetById_Handler(srv interface{}, ctx context.Context, dec
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(OccurreceServiceServer).GetById(ctx, req.(*Id))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _OccurreceService_GetAll_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Id)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OccurreceServiceServer).GetAll(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto.OccurreceService/GetAll",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OccurreceServiceServer).GetAll(ctx, req.(*Id))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -290,6 +322,10 @@ var OccurreceService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetById",
 			Handler:    _OccurreceService_GetById_Handler,
+		},
+		{
+			MethodName: "GetAll",
+			Handler:    _OccurreceService_GetAll_Handler,
 		},
 		{
 			MethodName: "EditById",

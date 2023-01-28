@@ -96,7 +96,20 @@ func HandleFetchOccurrenceByIdRequest(ctx *gin.Context) {
 	ctx.IndentedJSON(http.StatusOK, responses.NewOccurrenceDetailsModelFromProtoToJSON(res))
 }
 
-func HandleFetchAllOccurrencesRequest(ctx *gin.Context)    {}
+func HandleFetchAllOccurrencesRequest(ctx *gin.Context) {
+	grpcRes, err := common.OccurrenceServiceClient.GetAll(ctx.Request.Context(), &pb.Id{})
+	if err != nil {
+		ctx.IndentedJSON(http.StatusInternalServerError, err.Error())
+	}
+
+	res := []*responses.OccurrenceDetails{}
+	for _, occurrence := range grpcRes.GetList() {
+		occurrenceAsJSON := responses.NewOccurrenceDetailsModelFromProtoToJSON(occurrence)
+		res = append(res, occurrenceAsJSON)
+	}
+
+	ctx.IndentedJSON(http.StatusOK, res)
+}
 func HandleFetchNearbyOccurrencesRequest(ctx *gin.Context) {}
 func HandleEditOccurrenceRequest(ctx *gin.Context)         {}
 func HandleAcceptOccurrenceRequest(ctx *gin.Context)       {}

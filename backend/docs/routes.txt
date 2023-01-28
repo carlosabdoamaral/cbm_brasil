@@ -7,8 +7,8 @@
 [OK] [POST]   /api/auth/sign-in/cpf
 [OK] [POST]   /api/auth/sign-in/email
 
-[POST]   /api/occurrence/new
-[GET]    /api/occurrence/by-id
+[OK] [POST]   /api/occurrence/new
+[OK] [GET]    /api/occurrence/by-id
 [GET]    /api/occurrence/all
 [GET]    /api/occurrence/nearby
 [PUT]    /api/occurrence/edit
