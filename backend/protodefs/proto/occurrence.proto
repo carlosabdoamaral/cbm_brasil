@@ -38,16 +38,24 @@ message CreateOccurrenceLocation {
 }
 
 message OccurrenceDetails {
-    int64 id_author = 1;
-    int64 id_firefighter = 2;
-    string banner_x64 = 3;
-    string title = 4;
-    string description = 5;
-    google.protobuf.Timestamp created_at = 6;
-    google.protobuf.Timestamp updated_at = 7;
-    google.protobuf.Timestamp accepted_at = 8;
-    OccurrenceDetailsLocation location = 9;
-    bool soft_deleted = 10;
+    int64 id_occurrence = 1;
+    string title = 2;
+    string description = 3;
+    string banner_x64 = 4;
+    google.protobuf.Timestamp created_at = 5;
+    google.protobuf.Timestamp updated_at = 6;
+    google.protobuf.Timestamp accepted_at = 7;
+    bool soft_deleted = 8;
+
+    int64 id_firefighter = 9;
+    string firefighter_full_name = 10;
+    string firefighter_email = 11;
+
+    int64 id_author = 12;
+    string author_full_name = 13;
+    string author_email = 14;
+
+    OccurrenceDetailsLocation location = 15;
 }
 message OccurrenceDetailsLocation {
     int64 id = 1;

@@ -19,3 +19,7 @@ func (s *OccurrenceServer) Create(ctx context.Context, req *pb.CreateOccurrence)
 		Message: "created successfully",
 	}, nil
 }
+
+func (s *OccurrenceServer) GetById(ctx context.Context, req *pb.Id) (*pb.OccurrenceDetails, error) {
+	return persistence.GetOccurreceByIdHandler(&ctx, req)
+}

@@ -25,16 +25,24 @@ type CreateOccurrenceLocation struct {
 }
 
 type OccurrenceDetails struct {
-	IdAuthor      int64                     `json:"id_author,omitempty"`
-	IdFirefighter int64                     `json:"id_firefighter,omitempty"`
-	Title         string                    `json:"title,omitempty"`
-	Description   string                    `json:"description,omitempty"`
-	CreatedAt     time.Time                 `json:"created_at,omitempty"`
-	UpdatedAt     time.Time                 `json:"updated_at,omitempty"`
-	AcceptedAt    time.Time                 `json:"accepted_at,omitempty"`
-	BannerX64     string                    `json:"banner_x64,omitempty"`
-	SoftDeleted   bool                      `json:"soft_deleted,omitempty"`
-	Location      OccurrenceDetailsLocation `json:"location,omitempty"`
+	IdOccurrence int64     `json:"id_occurrence,omitempty"`
+	Title        string    `json:"title,omitempty"`
+	Description  string    `json:"description,omitempty"`
+	BannerX64    string    `json:"banner_x64,omitempty"`
+	CreatedAt    time.Time `json:"created_at,omitempty"`
+	UpdatedAt    time.Time `json:"updated_at,omitempty"`
+	AcceptedAt   time.Time `json:"accepted_at,omitempty"`
+	SoftDeleted  bool      `json:"soft_deleted,omitempty"`
+
+	IdFirefighter       int64  `json:"id_firefighter,omitempty"`
+	FirefighterFullname string `json:"firefighter_fullname,omitempty"`
+	FirefighterEmail    string `json:"firefighter_email,omitempty"`
+
+	IdAuthor       int64  `json:"id_author,omitempty"`
+	AuthorFullName string `json:"author_fullname,omitempty"`
+	AuthorEmail    string `json:"author_email,omitempty"`
+
+	Location OccurrenceDetailsLocation `json:"location,omitempty"`
 }
 type OccurrenceDetailsLocation struct {
 	Id           int64   `json:"id,omitempty"`

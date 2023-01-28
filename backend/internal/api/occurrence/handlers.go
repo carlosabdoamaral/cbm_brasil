@@ -4,10 +4,12 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 
 	"github.com/carlosabdoamaral/cbm_brasil/backend/common"
 	"github.com/carlosabdoamaral/cbm_brasil/backend/internal/rabbit"
 	"github.com/carlosabdoamaral/cbm_brasil/backend/internal/responses"
+	pb "github.com/carlosabdoamaral/cbm_brasil/backend/protodefs/gen/proto"
 	"github.com/gin-gonic/gin"
 )
 
@@ -64,7 +66,36 @@ func HandleNewOccurrenceRequest(ctx *gin.Context) {
 
 	ctx.IndentedJSON(http.StatusOK, "create occurrence was published to queue!")
 }
-func HandleFetchOccurrenceByIdRequest(ctx *gin.Context)    {}
+
+func HandleFetchOccurrenceByIdRequest(ctx *gin.Context) {
+	occurrenceIdParam := ctx.Param("occurrence_id")
+	occurrenceId, err := strconv.ParseInt(occurrenceIdParam, 10, 64)
+	if err != nil {
+		common.LogError(err.Error())
+		ctx.IndentedJSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	protoMessage := &pb.Id{
+		Id:        occurrenceId,
+		AuthToken: "",
+	}
+
+	res, err := common.OccurrenceServiceClient.GetById(ctx.Request.Context(), protoMessage)
+	if err != nil {
+		common.LogError(err.Error())
+		ctx.IndentedJSON(http.StatusNoContent, err.Error())
+		return
+	}
+
+	if res.GetTitle() == "" {
+		ctx.IndentedJSON(http.StatusOK, "no occurrence found with this id")
+		return
+	}
+
+	ctx.IndentedJSON(http.StatusOK, responses.NewOccurrenceDetailsModelFromProtoToJSON(res))
+}
+
 func HandleFetchAllOccurrencesRequest(ctx *gin.Context)    {}
 func HandleFetchNearbyOccurrencesRequest(ctx *gin.Context) {}
 func HandleEditOccurrenceRequest(ctx *gin.Context)         {}
