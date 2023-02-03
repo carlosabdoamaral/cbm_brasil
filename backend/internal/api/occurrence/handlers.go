@@ -14,8 +14,7 @@ import (
 )
 
 func createOccurrenceObjIsEmpty(model *responses.CreateOccurrence) bool {
-	if model.IdFirefighter == 0 ||
-		model.IdAuthor == 0 ||
+	if model.IdAuthor == 0 ||
 		model.BannerX64 == "" ||
 		model.Description == "" ||
 		model.Title == "" ||

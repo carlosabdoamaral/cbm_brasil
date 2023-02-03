@@ -3,7 +3,7 @@ import { Menu } from "semantic-ui-react";
 import { COLORS } from "../enums/enums";
 
 export function NavbarWidget() {
-  const [routes, _] = useState([
+  const [routes, ] = useState([
     { key: 0, text: "Menu", to: "/" },
     { key: 1, text: "Nova ocorrência", to: "/new-occurrence" },
     { key: 2, text: "Criar conta", to: "/sign-up" },

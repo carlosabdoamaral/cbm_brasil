@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   Button,
@@ -11,18 +11,16 @@ import {
   Segment,
 } from "semantic-ui-react";
 import { COLORS, MOCK_TEMPLATES } from "../enums/enums";
-import { GenerateMock } from "../mocks/gen";
-import OccurrenceCardWidget from "../widgets/occurrence-card-widget";
 import Spacer from "../widgets/spacer-widget";
-import firefighters from "../assets/images/firefighters.jpeg";
 import { NavbarWidget } from "../widgets/navbar-widget";
+import axios from "axios";
+import { addErrorNotification } from "../utils/notifications";
+import OccurrenceCardWidget from "../widgets/occurrence-card-widget";
 
 export function HomePage() {
   const maxOccurrences = 6;
 
-  const [occurrences, setOccurrences] = useState(
-    GenerateMock(MOCK_TEMPLATES.OCCURRENCES)
-  );
+  const [occurrences, setOccurrences]: any[] = useState([]);
   const [isShowingAllOccurrences, setIsShowingAllOccurrences] = useState(false);
 
   function renderHeader() {
@@ -88,14 +86,15 @@ export function HomePage() {
     const renderOccurrencesListLimited = () => {
       return (
         <Grid columns={3}>
-          {occurrences!.map(
-            (occurrence, index) =>
-              index < maxOccurrences && (
-                <GridColumn>
-                  <OccurrenceCardWidget {...occurrence} />
-                </GridColumn>
-              )
-          )}
+          {!!occurrences &&
+            occurrences.map(
+              (item: any, i: number) =>
+                i <= maxOccurrences && (
+                  <GridColumn>
+                    <OccurrenceCardWidget {...item} key={i} />
+                  </GridColumn>
+                )
+            )}
         </Grid>
       );
     };
@@ -103,11 +102,12 @@ export function HomePage() {
     const renderOccurrencesListUnlimited = () => {
       return (
         <Grid columns={3}>
-          {occurrences!.map((occurrence, index) => (
-            <GridColumn>
-              <OccurrenceCardWidget {...occurrence} />
-            </GridColumn>
-          ))}
+          {!!occurrences &&
+            occurrences.map((item: any, i: number) => (
+              <GridColumn>
+                <OccurrenceCardWidget {...item} key={i} />
+              </GridColumn>
+            ))}
         </Grid>
       );
     };
@@ -147,6 +147,48 @@ export function HomePage() {
       </>
     );
   }
+
+  async function fetchAllOccurrences() {
+    const URL = `${process.env.REACT_APP_OCCURRENCE_BASE_URL}/all`;
+    await axios
+      .get(URL)
+      .then(({ data }) => {
+        let dataList: any[] = [];
+        data.map((item: any, i: number) => {
+          let model = {
+            IdOccurrence: item.id_occurrence,
+            Title: item.title,
+            Description: item.description,
+            BannerX64: item.banner_x64,
+            IdFirefighter: item.id_firefighter,
+            FirefighterFullname: item.firefighter_fullname,
+            FirefighterEmail: item.firefighter_email,
+            IdAuthor: item.id_author,
+            AuthorFullname: item.author_fullname,
+            AuthorEmail: item.author_email,
+            CreatedAt: item.created_at,
+            UpdatedAt: item.updated_at,
+            AcceptedAt: item.accepted_at,
+            CanceledAt: item.canceled_at,
+            FinishedAt: item.finished_at,
+          };
+
+          dataList.push(model);
+        });
+
+        setOccurrences(dataList);
+      })
+      .catch(({ response }) => {
+        addErrorNotification(response.data);
+      })
+      .finally(() => {
+        //code
+      });
+  }
+
+  useEffect(() => {
+    fetchAllOccurrences();
+  }, []);
 
   return (
     <div style={{ paddingBottom: "3em" }}>

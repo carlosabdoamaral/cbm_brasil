@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -63,37 +64,51 @@ export function NewOcurrencePage() {
   }
 
   async function handleSubmit() {
-    if (allRequiredFieldsAreFilled()) {
-      setIsLoading(true);
-
-      let addr = await getCEPDetails(CEP);
-      if (addressInterfaceIsEmpty(addr)) {
-        return;
-      }
-
-      const body: NewOccurrenceRequestInterface = {
-        AccountId: 1,
-        CreatedAt: new Date(),
-        System: GetOperationalSystem(),
-        Title: title,
-        Image: image,
-        Location: addr,
-      };
-
-      doPost("/api/", body)
-        .then((res) => {
-          addSuccessNotification("Enviado com sucesso");
-          handleClearValues();
-        })
-        .catch((err) => {
-          addErrorNotification(err);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    } else {
+    if (!allRequiredFieldsAreFilled()) {
       addErrorNotification("Todos os campos devem estar preenchidos");
+      return;
     }
+
+    setIsLoading(true);
+
+    let addr = await getCEPDetails(CEP);
+    if (addressInterfaceIsEmpty(addr)) {
+      return;
+    }
+
+    const body: NewOccurrenceRequestInterface = {
+      id_author: 1,
+      title: title,
+      description: "lorem ipsum",
+      banner_x64: "ABCDEF__AAAAA_ASJDAK_==",
+      location: {
+        id: 1,
+        cep: addr.CEP,
+        country: addr.Country,
+        state: addr.State,
+        city: addr.City,
+        neighborhood: addr.Neighborhood,
+        street: addr.Street,
+        place_number: 10,//addr.PlaceNumber
+        complement: "ABC",//placeNotes
+        latitude: 20.0,
+        longitude: 10.0,
+      },
+    };
+
+    const URL = `${process.env.REACT_APP_OCCURRENCE_BASE_URL}/new`;
+    await axios
+      .post(URL, body)
+      .then((res) => {
+        addSuccessNotification(res.data);
+        handleClearValues();
+      })
+      .catch((err) => {
+        addErrorNotification(err.response.data);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }
 
   function handleClearValues(mustNotify: boolean = false) {

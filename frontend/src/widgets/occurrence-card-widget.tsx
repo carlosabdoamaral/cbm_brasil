@@ -3,18 +3,17 @@ import { OccurrenceDetailsInterface } from "../interfaces/interfaces";
 import { DATE_FORMATS } from "../enums/enums";
 import Moment from "react-moment";
 import Spacer from "./spacer-widget";
+import { useEffect } from "react";
 
-export default function OccurrenceCardWidget(
-  occurrence: OccurrenceDetailsInterface
-) {
-  function occurrenceAlreadyAnswered() {
-    return occurrence.AlreadyAnswered;
-  }
+export default function OccurrenceCardWidget(occurrence: any) {
+  useEffect(() => {
+    console.log(occurrence);
+  }, []);
 
   return (
     <Card fluid>
       <Card.Content>
-        <Card.Header>#{occurrence.OccurrenceId.toString()}</Card.Header>
+        <Card.Header>#{occurrence.IdOccurrence.toString()}</Card.Header>
 
         <Card.Meta>
           <small className="date">
@@ -33,14 +32,14 @@ export default function OccurrenceCardWidget(
       </Card.Content>
       <Card.Content extra>
         <p color="red">
-          {occurrenceAlreadyAnswered() && (
+          {true && (
             <>
               <Icon name="check" />
               Ocorrência sendo atendida
             </>
           )}
 
-          {!occurrenceAlreadyAnswered() && (
+          {!true && (
             <>
               <Icon name="close" />
               Ocorrência ainda não atendida

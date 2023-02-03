@@ -103,15 +103,14 @@ func insertOccurrence(ctx context.Context, req *pb.CreateOccurrence) (idOccurren
 	var (
 		db    *sql.DB = common.Database
 		query string  = `
-		INSERT INTO occurrence_tb(id_author, id_firefighter, banner_x64, title, description)
-		VALUES ($1, $2, $3, $4, $5)
+		INSERT INTO occurrence_tb(id_author, banner_x64, title, description)
+		VALUES ($1, null, $2, $3, $4)
 		RETURNING id;`
 	)
 
 	rows, err := db.Query(
 		query,
 		req.GetIdAuthor(),
-		req.GetIdFirefighter(),
 		req.GetBannerX64(),
 		req.GetTitle(),
 		req.GetDescription(),
